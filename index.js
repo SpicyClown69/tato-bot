@@ -94,6 +94,7 @@ const select = new StringSelectMenuBuilder()
 
 client.on("messageCreate", async (msg) => {
     if (filterCheck(msg) === false) {return}
+    const live_config = JSON.parse(fs.readFileSync("./config.json"))
     const blocklist = JSON.parse(fs.readFileSync("./blocklist.json")) // just so you dont have to restart the bot every time someone blocks it
     if (blocklist.includes(msg.author.id)) {return}
     const filter = (m) => m.member.id === msg.member.id
@@ -202,9 +203,10 @@ client.on("messageCreate", async (msg) => {
 })
 
 function filterCheck(message) {
-    for (var i = 0; i < config.main_filter.length; i++) {
-        if (message.content.toLowerCase().includes(config.main_filter[i])) {
-            console.log(config.main_filter[i])
+    const live_config = JSON.parse(fs.readFileSync("./config.json"))
+    for (var i = 0; i < live_config.main_filter.length; i++) {
+        if (message.content.toLowerCase().includes(live_config.main_filter[i])) {
+            console.log(live_config.main_filter[i])
             return true
         }
     }
