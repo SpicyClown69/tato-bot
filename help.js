@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags, EmbedBuilder, StringSelectMenuBuilder, ButtonBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder} = require('discord.js')
 const config = require("../config.json")
-
+const fs = require("fs")
 function createSelectOptions() {
     let buffer = []
     for (var i = 0; i < Object.keys(config.faq).length; i++) { // 4:20GMT istfg if i have to do the most jank ass solution to get this to work
@@ -18,6 +18,7 @@ const data = new SlashCommandBuilder()
 	.setDescription("sends the help message for the mod")
 const func = async (interaction) => {
 	try {
+        const live_config = JSON.parse(fs.readFileSync("./config.json"))
         const filter = (i) => i.member.id === interaction.member.id
         const select = new StringSelectMenuBuilder()
             .setCustomId('faq')
