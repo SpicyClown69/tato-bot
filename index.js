@@ -202,10 +202,9 @@ client.on("messageCreate", async (msg) => {
 })
 
 function filterCheck(message) {
-    const live_config = JSON.parse(fs.readFileSync("./config.json"))
-    for (var i = 0; i < live_config.main_filter.length; i++) {
-        if (message.content.toLowerCase().includes(live_config.main_filter[i])) {
-            console.log(live_config.main_filter[i])
+    for (var i = 0; i < config.main_filter.length; i++) {
+        if (message.content.toLowerCase().includes(config.main_filter[i])) {
+            console.log(config.main_filter[i])
             return true
         }
     }
