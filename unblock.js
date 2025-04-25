@@ -5,7 +5,7 @@ const data = new SlashCommandBuilder()
 	.setDescription("used for unblocking the bot if you want to let it respond to your messages")
 const func = async (interaction) => {
 	try {
-
+        const live_config = JSON.parse(fs.readFileSync("./config.json"))
         let blocklist = JSON.parse(fs.readFileSync("./blocklist.json"))
         if (blocklist.includes(interaction.user.id)) {
 
