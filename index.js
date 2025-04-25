@@ -1,0 +1,220 @@
+const {
+    Client,
+    EmbedBuilder,
+    StringSelectMenuBuilder,
+    StringSelectMenuOptionBuilder,
+    GatewayIntentBits,
+    ButtonBuilder,
+    ActionRowBuilder, 
+    ButtonStyle,
+    REST,
+    Routes,
+    Collection,
+} = require("discord.js")
+
+const fs = require("fs")
+
+// if you want to change what triggers the autoresponder, add things to the "main_filter" object
+// right now it triggers if you ping potatobot
+const config = require("./config.json")
+
+// if you dont have a token.json file, create one and just do [<your token>]
+const token = require("./token.json")
+
+
+const client = new Client({intents:[
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessages
+]})
+
+function createSelectOptions() {
+    let buffer = []
+    for (var i = 0; i < Object.keys(config.faq).length; i++) { // 4:20GMT istfg if i have to do the most jank ass solution to get this to work
+        buffer.push({
+            label:(config.faq[ Object.keys(config.faq) [i] ].fields[0].name),
+            value:(Object.keys(config.faq)[i].toString()) 
+        })
+    }
+    return buffer
+}
+const selectOptions = createSelectOptions()
+
+
+//---------------------------------------------------------------------------
+// command loader
+
+client.commands = new Collection()
+
+const commands = [];
+const commandFuncs = {};
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js') && file !== "template.js"); // ignore the template command
+const commandsEnabled = true;
+// bot client id needed here
+const clientId = "1364999662280638616"
+
+// load commands into discord
+if (commandsEnabled) {
+
+    for (const file of commandFiles) {
+        const command = require(`./commands/${file}`);
+        console.log(file, command)
+        commands.push(command.data.toJSON());
+        commandFuncs[command.data.name] = (command.func)
+    }
+}
+
+const rest = new REST({ version: '10' }).setToken(token[0]);
+
+(async () => {
+    try {
+        await rest.put(
+            Routes.applicationCommands(clientId),
+            { body: commands },
+        );
+    } catch (e) {
+        console.error(e)
+    }
+})()
+
+// Create the slash commands
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isChatInputCommand()) return;
+    commandFuncs[interaction.commandName](interaction)
+});
+
+// actual code
+
+const select = new StringSelectMenuBuilder()
+    .setCustomId('faq')
+    .setPlaceholder('Select a Question')
+    //.setOptions(selectOptions.map(question => { return { label:question.label.toString(), value:question.value.toString()}}))
+    .setOptions(selectOptions)
+
+
+client.on("messageCreate", async (msg) => {
+    if (filterCheck(msg) === false) {return}
+    const blocklist = JSON.parse(fs.readFileSync("./blocklist.json")) // just so you dont have to restart the bot every time someone blocks it
+    if (blocklist.includes(msg.author.id)) {return}
+    const filter = (m) => m.member.id === msg.member.id
+
+    const wiki = new ButtonBuilder()
+        .setLabel("Backrooms Wiki")
+        .setURL(config.links.wiki)
+        .setStyle("Link")
+
+    const mac_not_working = new ButtonBuilder()
+        .setLabel("Use Mac?")
+        .setURL(config.links.wiki_mac)
+        .setStyle("Link")
+
+    const tutorial = new ButtonBuilder()
+        .setLabel("Video Tutorial")
+        .setURL(config.links.wiki_install)
+        .setStyle("Link")
+
+    const block = new ButtonBuilder()
+        .setLabel("Block")
+        .setCustomId("block")
+        .setStyle("Danger")
+
+    const issues = new ButtonBuilder()
+        .setLabel("READ | KNOWN ISSUES")
+        .setCustomId("issues")
+        .setStyle("Primary")
+
+    const row = new ActionRowBuilder()
+        .addComponents(issues, wiki, mac_not_working, tutorial, block)
+
+    const row2 = new ActionRowBuilder()
+        .addComponents(select)
+
+    const embed = new EmbedBuilder()
+        .setColor(0xFFCC00)
+        .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+        .setTitle("Frequently Asked Questions")
+        .addFields(
+            { name:"What can I find here?", value:"You can find links to very important info below at all times.\nSelect your question below"}
+        )
+        .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
+    const response = await msg.reply({
+        embeds: [embed] ,
+        components: [row,row2],
+        withResponse: true,
+        ephemeral: true
+    });
+
+    const collector = response.createMessageComponentCollector({ filter: filter, time: 240_000});
+
+    collector.on('collect', async (i) => {
+        const live_config = JSON.parse(fs.readFileSync("./config.json"))
+        if (i.customId === "block") {
+            let blocklist = JSON.parse(fs.readFileSync("./blocklist.json"))
+            if (blocklist.includes(i.user.id)) {
+
+                const embed = new EmbedBuilder()
+                .setTitle("You have already blocked this bot")
+                .setColor(0xFF0000)
+                .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+                .setFooter({text:"You can still use /help | You can unblock yourself using /unblock"})
+                i.update({embeds:[embed], ephemeral: true})
+                return
+            }
+            blocklist.push(i.user.id)
+            fs.writeFileSync("./blocklist.json", JSON.stringify(blocklist, null, 4))
+
+            const embed = new EmbedBuilder()
+                .setTitle("Added to block-list")
+                .setColor(0xFF0000)
+                .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+                .setDescription("What does this mean? It means that if you say something in my filter; I wont reply to you.")
+                .setFooter({text:"You can still use /help | You can unblock yourself using /unblock"})
+                i.update({embeds:[embed], ephemeral: true})
+
+            return
+        }
+
+        if (i.customId === "issues") {
+            const embed = new EmbedBuilder()
+                .setTitle("Frequently Asked Questions")
+                .setColor(0xFFCC00)
+                .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+                .addFields(live_config.faq.important_note.fields)
+                .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
+            i.update({embeds:[embed], components:[row,row2], ephemeral: true})
+            return
+        }
+
+
+        const selection = i.values[0];
+        try {
+            const embed = new EmbedBuilder()
+                .setTitle("Frequently Asked Questions")
+                .setColor(0xFFCC00)
+                .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+                .addFields(live_config.faq[selection].fields)
+                .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
+            i.update({embeds:[embed], components:[row,row2], ephemeral: true})
+        } catch (e) {
+            console.log(e)
+        }
+    });
+})
+
+function filterCheck(message) {
+    for (var i = 0; i < config.main_filter.length; i++) {
+        if (message.content.toLowerCase().includes(config.main_filter[i])) {
+            console.log(config.main_filter[i])
+            return true
+        }
+    }
+    return false
+}
+
+client.on("error", (e) => {
+    console.log(e)
+})
+
+
+client.login(token[0])
+client.on("ready", () => { console.log("started")})

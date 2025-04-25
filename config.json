@@ -1,0 +1,83 @@
+{
+    "links":{
+        "wiki":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki",
+        "wiki_enter_backrooms":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#entering-the-backrooms",
+        "wiki_dependencies":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info",
+        "wiki_multiplayer":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#multiplayer",
+        "wiki_mac":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info#incompatibilities",
+        "wiki_install":"https://youtu.be/URdW9aZjP_U?si=LVQDf3_JY9UbDgqP"
+    },
+    "main_filter":["<@1360807782001148134>"],
+    "faq":{
+        "important_note":{
+            "fields":[{
+                "name":"KNOWN UNSOLVABLE ISSUES",
+                "value":"spb-revamped does not work with integrated graphics\nspb-revamped does not work on MacOS\nspb-revamped does not work with Sodium, Iris or any other performance mod that changes rendering and lighting\nspb-revamped does not work on forge or neoforge"
+            }]
+        },
+        "flashlight":{
+            "fields":[{
+                "name":"How do I turn on my flashlight?",
+                "value":"R."
+            }]
+        },
+        "shaders":{
+            "fields":[{
+                "name":"How do I remove the shaders?",
+                "value":"You cant."
+            }]
+        },
+        "integrated":{
+            "fields":[{
+                "name":"Why does my game crash on world load?",
+                "value":"Either you have an incompatible mod, or you use integrated graphics"
+            }]
+        },
+        "shaders_2":{
+            "fields":[{
+                "name":"Where are the shaders?",
+                "value":"The shaders are built in"
+            }]
+        },
+        "multiplayer":{
+            "fields":[{
+                "name":"How do I play with friends?",
+                "value":"Use the Essential mod, add them on social, join a world and then host it."
+            }]
+        },
+        "enter":{
+            "fields":[{
+                "name":"How do I enter the backrooms?",
+                "value":"Suffocate yourself in sand or gravel."
+            }]
+        },
+        "error":{
+            "fields":[{
+                "name":"The mod wont load",
+                "value":"Check your mods folder, you should have [fabric api, geckolib, simple voice chat, spb-revamped]"
+            },{
+                "name":"The mod still wont load",
+                "value":"If you have right mods and it still doesnt load. You should **read the mods file name**. you most likely have the forge version.\n\nif it still doesnt work, read the 'mod incompatibilites' error that shows up."
+            }]
+            
+        },
+        "install":{
+            "fields":[{
+                "name":"How do I install the mod?",
+                "value":"https://youtu.be/URdW9aZjP_U?si=LVQDf3_JY9UbDgqP"
+            }]
+        },
+        "new_levels":{
+            "fields":[{
+                "name":"Will there be any new levels?",
+                "value":"At the moment, no. SP is currently busy working on a new video"
+            }]
+        },
+        "leave_level":{
+            "fields":[{
+                "name":"How do I get to the next level?",
+                "value":"Walk 1000 blocks or more to start spawning exits and look around for one"
+            }]
+        }
+    }
+}
