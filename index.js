@@ -131,7 +131,7 @@ client.on("messageCreate", async (msg) => {
 
     const embed = new EmbedBuilder()
         .setColor(0xFFCC00)
-        .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+        .setThumbnail(live_config.links.embed_image)
         .setTitle("Frequently Asked Questions")
         .addFields(
             { name:"What can I find here?", value:"You can find links to very important info below at all times.\nSelect your question below"}
@@ -155,7 +155,7 @@ client.on("messageCreate", async (msg) => {
                 const embed = new EmbedBuilder()
                 .setTitle("You have already blocked this bot")
                 .setColor(0xFF0000)
-                .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+                .setThumbnail(live_config.links.embed_image)
                 .setFooter({text:"You can still use /help | You can unblock yourself using /unblock"})
                 i.update({embeds:[embed], ephemeral: true})
                 return
@@ -166,7 +166,7 @@ client.on("messageCreate", async (msg) => {
             const embed = new EmbedBuilder()
                 .setTitle("Added to block-list")
                 .setColor(0xFF0000)
-                .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+                .setThumbnail(live_config.links.embed_image)
                 .setDescription("What does this mean? It means that if you say something in my filter; I wont reply to you.")
                 .setFooter({text:"You can still use /help | You can unblock yourself using /unblock"})
                 i.update({embeds:[embed], ephemeral: true})
@@ -178,7 +178,7 @@ client.on("messageCreate", async (msg) => {
             const embed = new EmbedBuilder()
                 .setTitle("Frequently Asked Questions")
                 .setColor(0xFFCC00)
-                .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+                .setThumbnail(live_config.links.embed_image)
                 .addFields(live_config.faq.important_note.fields)
                 .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
             i.update({embeds:[embed], components:[row,row2], ephemeral: true})
@@ -191,7 +191,7 @@ client.on("messageCreate", async (msg) => {
             const embed = new EmbedBuilder()
                 .setTitle("Frequently Asked Questions")
                 .setColor(0xFFCC00)
-                .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+                .setThumbnail(live_config.links.embed_image)
                 .addFields(live_config.faq[selection].fields)
                 .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
             i.update({embeds:[embed], components:[row,row2], ephemeral: true})
@@ -202,9 +202,10 @@ client.on("messageCreate", async (msg) => {
 })
 
 function filterCheck(message) {
-    for (var i = 0; i < config.main_filter.length; i++) {
-        if (message.content.toLowerCase().includes(config.main_filter[i])) {
-            console.log(config.main_filter[i])
+    const live_config = JSON.parse(fs.readFileSync("./config.json"))
+    for (var i = 0; i < live_config.main_filter.length; i++) {
+        if (message.content.toLowerCase().includes(live_config.main_filter[i])) {
+            console.log(live_config.main_filter[i])
             return true
         }
     }
