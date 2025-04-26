@@ -81,6 +81,12 @@
                 "name":"How do I get to the next level?",
                 "value":"Walk 1000 blocks or more to start spawning exits and look around for one"
             }]
+        },
+        "level_count":{
+            "fields":[{
+                "name":"How many levels are there?",
+                "value":"There are 5 levels currently"
+            }]
         }
     }
 }
