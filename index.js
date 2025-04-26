@@ -19,7 +19,7 @@ const fs = require("fs")
 const config = require("./config.json")
 
 // if you dont have a token.json file, create one and just do [<your token>]
-const token = require("./token.json")
+const token = process.env.DISCORD_TOKEN
 
 
 const client = new Client({intents:[
