@@ -59,8 +59,10 @@
             },{
                 "name":"The mod still wont load",
                 "value":"If you have right mods and it still doesnt load. You should **read the mods file name**. you most likely have the forge version.\n\nif it still doesnt work, read the 'mod incompatibilites' error that shows up."
-            }]
-            
+            },{
+                "name":"Most mods are incompatible",
+                "value":"Due to how veil works, most mods conflict with spb-revamped. Treat every mod as incompatible unless stated it works"
+            }] 
         },
         "install":{
             "fields":[{
