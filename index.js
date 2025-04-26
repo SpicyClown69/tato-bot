@@ -85,25 +85,6 @@ client.on('interactionCreate', async interaction => {
 
 // actual code
 
-client.on("messageCreate", (message) => {
-    if (message.author.id !== "721640105307275315" && message.content.toLowerCase() === "linux") {return}
-    const linux = [
-        "https://cdn.discordapp.com/attachments/1156304119313748010/1360535401164570624/caption.gif?ex=680d4515&is=680bf395&hm=6f04b4ee59a0e103bc272d1799d42e5c4993a732932c39997a3ba9f9a991c3aa&",
-        "https://tenor.com/view/linux-trash-linuxbad-gif-18671901",
-        "https://tenor.com/view/linux-gif-25928231",
-        "https://tenor.com/view/sudo-rm-rf-linux-bruh-chungus-poggers-gif-19024993",
-        "https://tenor.com/view/sudo-rm-rf-sudo-rm-rf-beamng-gif-25571467",
-        "https://tenor.com/view/linux-linux-users-gif-24927537",
-        "https://tenor.com/view/linux-arch-linux-desktop-productive-drivers-gif-26104738",
-        "https://tenor.com/view/breaking-in-windows-linux-meme-breaking-into-a-windows-user-gif-27138745",
-        "https://tenor.com/view/arch-linux-linux-open-source-arch-i-use-arch-btw-gif-25315741",
-        "https://tenor.com/view/linux-linux-user-open-source-gif-26342988",
-        "https://tenor.com/view/linux-windows-arch-btw-vulnerability-gif-26202413",
-        "https://tenor.com/view/cat-linux-ubuntu-fork-bomb-funny-gif-26955144",
-        "https://tenor.com/view/linux-windows-11-window-door-computer-breaking-into-gif-2145998682255639382"
-        ]
-    message.reply(linux[Math.floor(Math.random() *linux.length)])
-})
 
 const select = new StringSelectMenuBuilder()
     .setCustomId('faq')
