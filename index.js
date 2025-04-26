@@ -85,14 +85,58 @@ client.on('interactionCreate', async interaction => {
 
 // actual code
 
+client.on("messageCreate", (message) => {
+    if (message.author.id !== "721640105307275315" && message.content.toLowerCase() === "linux") {return}
+    const linux = [
+        "https://cdn.discordapp.com/attachments/1156304119313748010/1360535401164570624/caption.gif?ex=680d4515&is=680bf395&hm=6f04b4ee59a0e103bc272d1799d42e5c4993a732932c39997a3ba9f9a991c3aa&",
+        "https://tenor.com/view/linux-trash-linuxbad-gif-18671901",
+        "https://tenor.com/view/linux-gif-25928231",
+        "https://tenor.com/view/sudo-rm-rf-linux-bruh-chungus-poggers-gif-19024993",
+        "https://tenor.com/view/sudo-rm-rf-sudo-rm-rf-beamng-gif-25571467",
+        "https://tenor.com/view/linux-linux-users-gif-24927537",
+        "https://tenor.com/view/linux-arch-linux-desktop-productive-drivers-gif-26104738",
+        "https://tenor.com/view/breaking-in-windows-linux-meme-breaking-into-a-windows-user-gif-27138745",
+        "https://tenor.com/view/arch-linux-linux-open-source-arch-i-use-arch-btw-gif-25315741",
+        "https://tenor.com/view/linux-linux-user-open-source-gif-26342988",
+        "https://tenor.com/view/linux-windows-arch-btw-vulnerability-gif-26202413",
+        "https://tenor.com/view/cat-linux-ubuntu-fork-bomb-funny-gif-26955144",
+        "https://tenor.com/view/linux-windows-11-window-door-computer-breaking-into-gif-2145998682255639382"
+        ]
+    message.reply(linux[Math.floor(Math.random() *linux.length)])
+})
+
 const select = new StringSelectMenuBuilder()
     .setCustomId('faq')
     .setPlaceholder('Select a Question')
     //.setOptions(selectOptions.map(question => { return { label:question.label.toString(), value:question.value.toString()}}))
     .setOptions(selectOptions)
 
-
 client.on("messageCreate", async (msg) => {
+
+    if (msg.content.toLowerCase() === "!unblock") {
+        let blocklist = JSON.parse(fs.readFileSync("./blocklist.json"))
+        if (blocklist.includes(msg.author.id)) {
+            blocklist.splice(blocklist.indexOf(msg.author.id),1)
+            
+            fs.writeFileSync("./blocklist.json", JSON.stringify(blocklist, null, 4))
+            
+            const embed = new EmbedBuilder()
+            .setTitle("You have unblocked this bot")
+            .setColor(0x00FF00)
+            .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+            msg.reply({embeds:[embed], ephemeral: true})
+    
+            return
+        }
+
+        const embed = new EmbedBuilder()
+            .setTitle("You have not blocked this bot")
+            .setColor(0xFF0000)
+            .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+            msg.reply({embeds:[embed], ephemeral: true})
+        return
+	}
+    
     if (filterCheck(msg) === false) {return}
     const live_config = JSON.parse(fs.readFileSync("./config.json"))
     const blocklist = JSON.parse(fs.readFileSync("./blocklist.json")) // just so you dont have to restart the bot every time someone blocks it
@@ -157,7 +201,7 @@ client.on("messageCreate", async (msg) => {
                 .setTitle("You have already blocked this bot")
                 .setColor(0xFF0000)
                 .setThumbnail(live_config.links.embed_image)
-                .setFooter({text:"You can still use /help | You can unblock yourself using /unblock"})
+                .setFooter({text:"You can still use /help | You can unblock yourself using !unblock"})
                 i.update({embeds:[embed], ephemeral: true})
                 return
             }
@@ -169,7 +213,7 @@ client.on("messageCreate", async (msg) => {
                 .setColor(0xFF0000)
                 .setThumbnail(live_config.links.embed_image)
                 .setDescription("What does this mean? It means that if you say something in my filter; I wont reply to you.")
-                .setFooter({text:"You can still use /help | You can unblock yourself using /unblock"})
+                .setFooter({text:"You can still use /help | You can unblock yourself using !unblock"})
                 i.update({embeds:[embed], ephemeral: true})
 
             return
