@@ -109,3 +109,5 @@ function filterCheck(message) {
 
 client.login(token[0])
 client.on("ready", () => { console.log("started")})
+
+// this method actually fucking sucked im so glad i didnt stick with it
