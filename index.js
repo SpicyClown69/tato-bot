@@ -64,7 +64,7 @@ if (commandsEnabled) {
     }
 }
 
-const rest = new REST({ version: '10' }).setToken(token[0]);
+const rest = new REST({ version: '10' }).setToken(token);
 
 (async () => {
     try {
@@ -218,5 +218,5 @@ client.on("error", (e) => {
 })
 
 
-client.login(token[0])
+client.login(token)
 client.on("ready", () => { console.log("started")})
