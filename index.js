@@ -93,18 +93,18 @@ const select = new StringSelectMenuBuilder()
     .setOptions(selectOptions)
 
 client.on("messageCreate", async (msg) => {
-
     if (msg.content.toLowerCase() === "!unblock") {
+        const live_config = JSON.parse(fs.readFileSync("./config.json"))
         let blocklist = JSON.parse(fs.readFileSync("./blocklist.json"))
         if (blocklist.includes(msg.author.id)) {
+
             blocklist.splice(blocklist.indexOf(msg.author.id),1)
-            
             fs.writeFileSync("./blocklist.json", JSON.stringify(blocklist, null, 4))
-            
+            sendError("user removed to blocklist",msg.author.id,0x0000FF)
             const embed = new EmbedBuilder()
             .setTitle("You have unblocked this bot")
             .setColor(0x00FF00)
-            .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+            .setThumbnail(live_config.links.embed_image)
             msg.reply({embeds:[embed], ephemeral: true})
     
             return
@@ -113,11 +113,9 @@ client.on("messageCreate", async (msg) => {
         const embed = new EmbedBuilder()
             .setTitle("You have not blocked this bot")
             .setColor(0xFF0000)
-            .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
-            msg.reply({embeds:[embed], ephemeral: true})
-        return
-	}
-    
+            .setThumbnail(live_config.links.embed_image)
+            interaction.reply({embeds:[embed], ephemeral: true})
+    }
     if (filterCheck(msg) === false) {return}
     const live_config = JSON.parse(fs.readFileSync("./config.json"))
     const blocklist = JSON.parse(fs.readFileSync("./blocklist.json")) // just so you dont have to restart the bot every time someone blocks it
@@ -177,7 +175,7 @@ client.on("messageCreate", async (msg) => {
         if (i.customId === "block") {
             let blocklist = JSON.parse(fs.readFileSync("./blocklist.json"))
             if (blocklist.includes(i.user.id)) {
-
+ 
                 const embed = new EmbedBuilder()
                 .setTitle("You have already blocked this bot")
                 .setColor(0xFF0000)
@@ -188,7 +186,7 @@ client.on("messageCreate", async (msg) => {
             }
             blocklist.push(i.user.id)
             fs.writeFileSync("./blocklist.json", JSON.stringify(blocklist, null, 4))
-
+            sendError("user added to blocklist",i.user.id,0x0000FF)
             const embed = new EmbedBuilder()
                 .setTitle("Added to block-list")
                 .setColor(0xFF0000)
@@ -238,10 +236,26 @@ function filterCheck(message) {
     return false
 }
 
+
 client.on("error", (e) => {
     console.log(e)
+    sendError("error",e,0xFF0000)
 })
 
+process.on("uncaughtException", (e) => {
+    console.log(e)
+    sendError("uncaught exception",e,0xFF0000)
+})
+
+async function sendError(code,e,color) {
+    const owner = await client.users.fetch("520961867368103936")
+    const embed = new EmbedBuilder()
+        .setTitle(code)
+        .setDescription(`${e}`)
+        .setTimestamp()
+        .setColor(color)
+    owner.send({embeds:[embed]})
+}
 
 client.login(token)
-client.on("ready", () => { console.log("started")})
+client.on("ready", () => { console.log("started"); sendError("start","mhm",0xF5005F)})
