@@ -12,7 +12,7 @@
     "faq":{
         "important_note":{
             "fields":[{
-                "name":"sKNOWN UNSOLVABLE ISSUES",
+                "name":"KNOWN UNSOLVABLE ISSUES",
                 "value":"spb-revamped does not work with integrated graphics\nspb-revamped does not work on MacOS\nspb-revamped does not work with Sodium, Iris or any other performance mod that changes rendering and lighting\nspb-revamped does not work on forge or neoforge"
             }]
         },
