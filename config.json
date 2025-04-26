@@ -8,7 +8,7 @@
         "wiki_mac":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info#incompatibilities",
         "wiki_install":"https://youtu.be/URdW9aZjP_U?si=LVQDf3_JY9UbDgqP"
     },
-    "main_filter":["<@1360807782001148134>"],
+    "main_filter":["<@1360807782001148134>","help","downloading","map","flashlight"],
     "faq":{
         "important_note":{
             "fields":[{
