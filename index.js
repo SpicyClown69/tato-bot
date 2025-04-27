@@ -287,6 +287,7 @@ function filterCheck(message) {
     const config = require('./config.json');
     const content = message.content.toLowerCase();
     
+    // Direct mention is always valid
     if (message.mentions.has(client.user)) {
         console.log('Support request detected: Direct mention');
         return true;
@@ -294,17 +295,23 @@ function filterCheck(message) {
 
     const words = content.split(/\s+/).map(word => word.trim());
     
-    // fuck yeah, better question detection that actually works YIPPIE
+    // Stricter question detection - must either have ? or start with a question word
     const questionWords = ['how', 'what', 'where', 'why', 'when', 'can', 'does', 'is', 'are', 'will'];
     const isQuestion = content.includes('?') || questionWords.some(qWord => 
-        words.some(word => word === qWord || word.startsWith(qWord))
+        words[0] === qWord // Only check first word to avoid false positives
     );
 
     if (!isQuestion) {
-        return false;
+        // Check main filter words if it's not a question
+        const hasFilterWord = config.main_filter.some(word => {
+            const regex = new RegExp(`\\b${word}\\b`, 'i');
+            return regex.test(content);
+        });
+        
+        return hasFilterWord;
     }
 
-    // a bunch of shit to check if the message is a support request
+    // Only check support patterns if it's actually a question
     const supportPatterns = {
         install: ['\\binstall\\b', '\\bsetup\\b', '\\bdownload\\b', '\\bfabric\\b', '\\bmod\\b', '\\bdependencies\\b', '\\bgeckolib\\b', '\\bvoicechat\\b', '\\bessential\\b'],
         crash: ['\\bcrash\\b', '\\berror\\b', '\\bbug\\b', '\\bfreeze\\b', '\\bstuck\\b', 'not working', '\\bbroken\\b', 'integrated graphics', '\\bincompatible\\b'],
@@ -313,7 +320,7 @@ function filterCheck(message) {
         compatibility: ['\\bmac\\b', '\\bmacos\\b', '\\bsodium\\b', '\\biris\\b', '\\bforge\\b', '\\bneoforge\\b', '\\bintegrated\\b', '\\baternos\\b', '\\bserver\\b', '\\bmultiplayer\\b']
     };
 
-    // and we check each category for support patterns
+    // Check each category for support patterns
     for (const [category, patterns] of Object.entries(supportPatterns)) {
         if (patterns.some(pattern => {
             const regex = new RegExp(pattern, 'i');
@@ -324,13 +331,7 @@ function filterCheck(message) {
         }
     }
 
-    // and we check if the message contains any of the main filter words
-    const hasFilterWord = config.main_filter.some(word => {
-        const regex = new RegExp(`\\b${word}\\b`, 'i');
-        return regex.test(content);
-    });
-
-    return hasFilterWord;
+    return false;
 }
 
 // handle support request with appropriate FAQ
