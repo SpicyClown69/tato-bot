@@ -258,7 +258,7 @@ client.on('messageCreate', async message => {
                         .setThumbnail(live_config.links.embed_image)
                         .addFields(live_config.faq.important_note.fields)
                         .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
-                    i.update({embeds:[embed], components:[row,row2], flags: MessageFlags.Ephemeral})
+                    i.update({embeds:[embed], components:[row,row2,row3], flags: MessageFlags.Ephemeral})
                     return
                 }
 
@@ -270,7 +270,7 @@ client.on('messageCreate', async message => {
                         .setThumbnail(live_config.links.embed_image)
                         .addFields(live_config.faq[selection].fields)
                         .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
-                    i.update({embeds:[embed], components:[row,row2], flags: MessageFlags.Ephemeral})
+                    i.update({embeds:[embed], components:[row,row2,row3], flags: MessageFlags.Ephemeral})
                 } catch (e) {
                     console.log(e)
                 }
