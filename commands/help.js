@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags, EmbedBuilder, StringSelectMenuBuilder, ButtonBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder} = require('discord.js')
 const config = require("../config.json")
-
+const fs = require("fs")
 function createSelectOptions() {
     let buffer = []
     for (var i = 0; i < Object.keys(config.faq).length; i++) { // 4:20GMT istfg if i have to do the most jank ass solution to get this to work
@@ -18,6 +18,7 @@ const data = new SlashCommandBuilder()
 	.setDescription("sends the help message for the mod")
 const func = async (interaction) => {
 	try {
+        const live_config = JSON.parse(fs.readFileSync("./config.json"))
         const filter = (i) => i.member.id === interaction.member.id
         const select = new StringSelectMenuBuilder()
             .setCustomId('faq')
@@ -54,7 +55,7 @@ const func = async (interaction) => {
 
         const embed = new EmbedBuilder()
             .setColor(0xFFCC00)
-            .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+            .setThumbnail(live_config.links.embed_image)
             .setTitle("Frequently Asked Questions")
             .addFields(
                 { name:"What can I find here?", value:"You can find links to very important info below at all times.\nSelect your question below"}
@@ -75,7 +76,7 @@ const func = async (interaction) => {
                 const embed = new EmbedBuilder()
                     .setTitle("Frequently Asked Questions")
                     .setColor(0xFFCC00)
-                    .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+                    .setThumbnail(live_config.links.embed_image)
                     .addFields(live_config.faq.important_note.fields)
                 i.update({embeds:[embed], components:[row,row2], ephemeral: true})
                 return

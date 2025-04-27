@@ -5,7 +5,7 @@ const data = new SlashCommandBuilder()
 	.setDescription("used for unblocking the bot if you want to let it respond to your messages")
 const func = async (interaction) => {
 	try {
-
+        const live_config = JSON.parse(fs.readFileSync("./config.json"))
         let blocklist = JSON.parse(fs.readFileSync("./blocklist.json"))
         if (blocklist.includes(interaction.user.id)) {
 
@@ -15,7 +15,7 @@ const func = async (interaction) => {
             const embed = new EmbedBuilder()
             .setTitle("You have unblocked this bot")
             .setColor(0x00FF00)
-            .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+            .setThumbnail(live_config.links.embed_image)
             interaction.reply({embeds:[embed], ephemeral: true})
     
             return
@@ -24,7 +24,7 @@ const func = async (interaction) => {
         const embed = new EmbedBuilder()
             .setTitle("You have not blocked this bot")
             .setColor(0xFF0000)
-            .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+            .setThumbnail(live_config.links.embed_image)
             interaction.reply({embeds:[embed], ephemeral: true})
 
         return
