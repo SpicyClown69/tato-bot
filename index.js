@@ -266,17 +266,42 @@ process.on("uncaughtException", (e) => {
     sendError("uncaught exception",e,0xFF0000)
 })
 
-async function sendError(code,e,color) {
-    const owner = await client.users.fetch("552766239009931274")
-    const embed = new EmbedBuilder()
-        .setTitle(code)
-        .setDescription(`${e}`)
-        .setTimestamp()
-        .setColor(color)
-    owner.send({embeds:[embed]})
+async function sendError(code, e, color) {
+    try {
+        // only trying to send a Discord message if the client is actually fucking ready and logged in lol
+        if (client.isReady()) {
+            const owner = await client.users.fetch("552766239009931274")
+            const embed = new EmbedBuilder()
+                .setTitle(code)
+                .setDescription(`${e}`)
+                .setTimestamp()
+                .setColor(color)
+            owner.send({embeds:[embed]})
+        } else {
+            console.error(`[${code}] ${e}`)
+        }
+    } catch (err) {
+        // there was really annoying errors that would just spam the console
+        console.error(`Failed to send error message: ${err}`)
+        console.error(`Original error: [${code}] ${e}`)
+    }
+}
+
+// validate token because i am too lazy to do it in the main function
+if (!token || !token[0] || typeof token[0] !== 'string' || token[0].length < 50) {
+    console.error("Invalid Discord token. Make sure token.json contains a valid bot token.")
+    process.exit(1)
 }
 
 client.login(token[0])
-client.on("ready", () => { console.log("started"); sendError("start","mhm",0xF5005F)})
+    .catch(err => {
+        console.error("Failed to login:", err)
+        process.exit(1)
+    })
+
+client.on("ready", () => { 
+    console.log("Bot started successfully")
+    sendError("start","Bot initialized successfully", 0xF5005F)
+})
 
 process.on("beforeExit", () => {sendError("shutdown","mhm",0xF5335F)})
