@@ -1,113 +1,196 @@
 {
-    "links":{
-        "embed_image":"https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp",
-        "wiki":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki",
-        "wiki_enter_backrooms":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#entering-the-backrooms",
-        "wiki_dependencies":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info",
-        "wiki_multiplayer":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#multiplayer",
-        "wiki_mac":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info#incompatibilities",
-        "wiki_install":"https://youtu.be/URdW9aZjP_U?si=LVQDf3_JY9UbDgqP"
+    "links": {
+        "embed_image": "https://cdn.discordapp.com/attachments/1156304119313748010/1156304119565574174/backrooms_logo.png",
+        "wiki": "https://backrooms-mod.fandom.com/wiki/Backrooms_Mod_Wiki",
+        "wiki_enter_backrooms": "https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#entering-the-backrooms",
+        "wiki_dependencies": "https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info",
+        "wiki_multiplayer": "https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#multiplayer",
+        "wiki_mac": "https://backrooms-mod.fandom.com/wiki/Mac_Installation",
+        "wiki_install": "https://backrooms-mod.fandom.com/wiki/Installation",
+        "modrinth": "https://modrinth.com/mod/backrooms"
     },
-    "main_filter":["<@1360807782001148134>","map","crash","mod","wiki","shaders","level"],
-    "faq":{
-        "important_note":{
-            "fields":[{
-                "name":"KNOWN UNSOLVABLE ISSUES",
-                "value":"spb-revamped does not work with integrated graphics\nspb-revamped does not work on MacOS\nspb-revamped does not work with Sodium, Iris or any other performance mod that changes rendering and lighting\nspb-revamped does not work on forge or neoforge"
-            }]
+    "main_filter": [
+        "help",
+        "support",
+        "mod",
+        "backrooms",
+        "found footage",
+        "spb",
+        "footage",
+        "<@1366075877477322845>"
+    ],
+    "faq": {
+        "important_note": {
+            "fields": [
+                {
+                    "name": "KNOWN UNSOLVABLE ISSUES",
+                    "value": "• The mod does NOT work with integrated graphics\n• The mod does NOT work on MacOS (due to OpenGL requirements)\n• The mod does NOT work with Sodium, Iris or any other performance mod that changes rendering\n• The mod does NOT work on Forge or Neoforge\n• The mod requires Fabric loader\n• Do NOT use Fabulous! graphics - only Fast or Fancy work\n\nThese issues CANNOT be fixed as they are engine limitations!"
+                }
+            ]
         },
-        "flashlight":{
-            "fields":[{
-                "name":"How do I turn on my flashlight?",
-                "value":"R."
-            }]
+        "dependencies": {
+            "fields": [
+                {
+                    "name": "What do I need to install?",
+                    "value": "Required dependencies for Minecraft 1.20.1:\n• Fabric API (any version)\n• Simple Voice Chat (1.20.1-2.4.32 or later)\n• GeckoLib (4.4.9 or later)\n• Veil (included in the mod)\n\nMake sure you're using Fabric loader, NOT Forge/Neoforge!"
+                }
+            ]
         },
-        "shaders":{
-            "fields":[{
-                "name":"How do I remove the shaders?",
-                "value":"You cant."
-            }]
+        "graphics": {
+            "fields": [
+                {
+                    "name": "Graphics Settings Requirements",
+                    "value": "• Use Fast or Fancy graphics only\n• Do NOT use Fabulous! graphics\n• Do NOT use Sodium/Iris or other performance mods\n• The mod may not work with integrated graphics"
+                }
+            ]
         },
-        "integrated":{
-            "fields":[{
-                "name":"Why does my game crash on world load?",
-                "value":"Either you have an incompatible mod, or you use integrated graphics"
-            }]
+        "backrooms": {
+            "fields": [
+                {
+                    "name": "How do I enter the Backrooms?",
+                    "value": "Suffocate yourself in any way for long enough and you'll noclip into the Backrooms. You'll need to travel through all 4 levels to escape:\n\n1. Level 0 - The classic Backrooms\n2. Level 1 - The Habitable Zone\n3. Level 2 - Pipe Dreams\n4. The Poolrooms\n5. The Infinite Grass Field"
+                }
+            ]
         },
-        "shaders_2":{
-            "fields":[{
-                "name":"Where are the shaders?",
-                "value":"The shaders are built in"
-            }]
+        "skinwalker": {
+            "fields": [
+                {
+                    "name": "Skinwalker Not Spawning?",
+                    "value": "The skinwalker does not spawn naturally in singleplayer (this is intentional).\n\nYou can use these commands if needed:\n• /skinwalker <target> - Makes skinwalker take target's skin\n• /release <target> - Releases target from skinwalker\n• /backroomsevent <event> - Manually triggers an event\n• /gimmemyinventoryback <target> - Restores saved inventory"
+                }
+            ]
         },
-        "multiplayer":{
-            "fields":[{
-                "name":"How do I play with friends?",
-                "value":"Use the Essential mod, add them on social, join a world and then host it."
-            }]
+        "flashlight": {
+            "fields": [
+                {
+                    "name": "How do I use the flashlight?",
+                    "value": "Press R to toggle your flashlight on/off."
+                }
+            ]
         },
-        "enter":{
-            "fields":[{
-                "name":"How do I enter the backrooms?",
-                "value":"Suffocate yourself in sand or gravel."
-            }]
+        "shaders": {
+            "fields": [
+                {
+                    "name": "About the Shaders/Visual Effects",
+                    "value": "• The shaders and visual effects are built into the mod\n• You cannot remove or disable them - they're part of the core experience\n• The mod uses Veil for these effects (already included)\n• Make sure you don't remove Veil's deferred resource pack"
+                }
+            ]
         },
-        "error":{
-            "fields":[{
-                "name":"The mod wont load",
-                "value":"Check your mods folder, you should have [fabric api, geckolib, simple voice chat, spb-revamped]"
-            },{
-                "name":"The mod still wont load",
-                "value":"If you have right mods and it still doesnt load. You should **read the mods file name**. you most likely have the forge version.\n\nif it still doesnt work, read the 'mod incompatibilites' error that shows up."
-            },{
-                "name":"Most mods are incompatible",
-                "value":"Due to how veil works, most mods conflict with spb-revamped. Treat every mod as incompatible unless stated it works"
-            }] 
+        "integrated": {
+            "fields": [
+                {
+                    "name": "Why does my game crash on world load?",
+                    "value": "Either you have an incompatible mod, or you use integrated graphics"
+                }
+            ]
         },
-        "install":{
-            "fields":[{
-                "name":"How do I install the mod?",
-                "value":"https://youtu.be/URdW9aZjP_U?si=LVQDf3_JY9UbDgqP"
-            }]
+        "shaders_2": {
+            "fields": [
+                {
+                    "name": "Where are the shaders?",
+                    "value": "The shaders are built in"
+                }
+            ]
         },
-        "new_levels":{
-            "fields":[{
-                "name":"Will there be any new levels?",
-                "value":"At the moment, no. SP is currently busy working on a new video"
-            }]
+        "multiplayer": {
+            "fields": [
+                {
+                    "name": "How do I play with friends?",
+                    "value": "There are two ways to play multiplayer:\n\n1. Essential Mod (Recommended):\n• Install Essential mod\n• Add friends on social\n• Host/join through Essential\n\n2. Dedicated Server:\n• Set up a dedicated server\n• For Aternos: Change Simple Voice Chat port from 24454 to -1 in config"
+                }
+            ]
         },
-        "leave_level":{
-            "fields":[{
-                "name":"How do I get to the next level?",
-                "value":"Walk 1000 blocks or more to start spawning exits and look around for one"
-            },{
-                "name":"Level 0",
-                "value":"White lights, Staircase"
-            },{
-                "name":"Level 1",
-                "value":"Hole in the wall with stairs"
-            },{
-                "name":"Poolrooms",
-                "value":"Giant room with pool, really tall"
-            },{
-                "name":"Infinite field",
-                "value":"Giant pillar, some of them are fake"
-            }]
-        },        
-        "command":{
-            "fields":[{
-                "name":"Is there a command to get to the next level?",
-                "value":"execute in spb-revamped:<level> run tp ~ ~ ~"
-            }]
+        "enter": {
+            "fields": [
+                {
+                    "name": "How do I enter the backrooms?",
+                    "value": "To enter the Backrooms:\n1. Dig a hole\n2. Enclose yourself inside\n3. Fill with sand/gravel to suffocate\n\nYou'll know it's working when:\n• Static sounds play\n• Screen goes black\n• Cutscene shows you falling into Level 0"
+                }
+            ]
         },
-        "hint":{
-            "fields":[{
-                "name":"Is there a way to remove the hint at the start of the game?",
-                "value":"There is no way to do this without modifying the game files"
-            },{
-                "name":"How to actually do this",
-                "value":"You need to decompile the mod using 7-zip or winrar, and delete the text in the Lang file and replace it with alt+255"
-            }]
+        "mechanics": {
+            "fields": [
+                {
+                    "name": "Basic Game Mechanics",
+                    "value": "• Jumping is DISABLED in the Backrooms (prevents hunger loss)\n• Press 'R' for flashlight (unusable in Poolrooms)\n• Watch ceiling lights for orientation\n• You need to travel 1000+ blocks to find exits"
+                }
+            ]
+        },
+        "levels": {
+            "fields": [
+                {
+                    "name": "About the Levels",
+                    "value": "You must progress through all levels to escape:\n\n1. Level 0 - The classic Backrooms (exit: white lights & staircase)\n2. Level 1 - The Habitable Zone (exit: hole in wall with stairs)\n3. Level 2 - Pipe Dreams\n4. The Poolrooms (exit: giant tall room with pool)\n5. The Infinite Grass Field (exit: giant pillars, some are fake)"
+                }
+            ]
+        },
+        "error": {
+            "fields": [
+                {
+                    "name": "Common Error Solutions",
+                    "value": "1. Check your mods folder has:\n• Fabric API\n• GeckoLib\n• Simple Voice Chat\n• The mod itself\n\n2. Common issues:\n• Wrong mod loader (need Fabric, not Forge)\n• Incompatible graphics mods\n• Using Fabulous graphics\n• Integrated graphics\n• MacOS"
+                }
+            ]
+        },
+        "install": {
+            "fields": [
+                {
+                    "name": "How do I install the mod?",
+                    "value": "https://backrooms-mod.fandom.com/wiki/Installation"
+                }
+            ]
+        },
+        "new_levels": {
+            "fields": [
+                {
+                    "name": "Will there be any new levels?",
+                    "value": "At the moment, no. SP is currently busy working on a new video"
+                }
+            ]
+        },
+        "leave_level": {
+            "fields": [
+                {
+                    "name": "How do I get to the next level?",
+                    "value": "Walk 1000 blocks or more to start spawning exits and look around for one"
+                },
+                {
+                    "name": "Level 0",
+                    "value": "White lights, Staircase"
+                },
+                {
+                    "name": "Level 1",
+                    "value": "Hole in the wall with stairs"
+                },
+                {
+                    "name": "Poolrooms",
+                    "value": "Giant room with pool, really tall"
+                },
+                {
+                    "name": "Infinite field",
+                    "value": "Giant pillar, some of them are fake"
+                }
+            ]
+        },
+        "command": {
+            "fields": [
+                {
+                    "name": "Is there a command to get to the next level?",
+                    "value": "execute in spb-revamped:<level> run tp ~ ~ ~"
+                }
+            ]
+        },
+        "hint": {
+            "fields": [
+                {
+                    "name": "Is there a way to remove the hint at the start of the game?",
+                    "value": "There is no way to do this without modifying the game files"
+                },
+                {
+                    "name": "How to actually do this",
+                    "value": "You need to download the mod's source code and edit it to remove the messages, the source code is available on GitHub."
+                }
+            ]
         }
     }
 }

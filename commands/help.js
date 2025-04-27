@@ -42,13 +42,18 @@ const func = async (interaction) => {
             .setURL(config.links.wiki_install)
             .setStyle("Link")
 
+        const modrinth = new ButtonBuilder()
+            .setLabel("Modrinth Page")
+            .setURL(config.links.modrinth)
+            .setStyle("Link")
+
         const issues = new ButtonBuilder()
             .setLabel("READ | KNOWN ISSUES")
             .setCustomId("issues")
             .setStyle("Primary")
     
         const row = new ActionRowBuilder()
-            .addComponents(issues, wiki, mac_not_working, tutorial)
+            .addComponents(issues, wiki, modrinth, mac_not_working, tutorial)
     
         const row2 = new ActionRowBuilder()
             .addComponents(select)
