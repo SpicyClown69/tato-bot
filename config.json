@@ -8,7 +8,7 @@
         "wiki_mac":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info#incompatibilities",
         "wiki_install":"https://youtu.be/URdW9aZjP_U?si=LVQDf3_JY9UbDgqP"
     },
-    "main_filter":["<@1360807782001148134>","help","downloading","map","flashlight"],
+    "main_filter":["<@1360807782001148134>","map","crash","mod","wiki","shaders","level"],
     "faq":{
         "important_note":{
             "fields":[{
@@ -80,12 +80,33 @@
             "fields":[{
                 "name":"How do I get to the next level?",
                 "value":"Walk 1000 blocks or more to start spawning exits and look around for one"
+            },{
+                "name":"Level 0",
+                "value":"White lights, Staircase"
+            },{
+                "name":"Level 1",
+                "value":"Hole in the wall with stairs"
+            },{
+                "name":"Poolrooms",
+                "value":"Giant room with pool, really tall"
+            },{
+                "name":"Infinite field",
+                "value":"Giant pillar, some of them are fake"
+            }]
+        },        
+        "command":{
+            "fields":[{
+                "name":"Is there a command to get to the next level?",
+                "value":"execute in spb-revamped:<level> run tp ~ ~ ~"
             }]
         },
-        "level_count":{
+        "hint":{
             "fields":[{
-                "name":"How many levels are there?",
-                "value":"There are 5 levels currently"
+                "name":"Is there a way to remove the hint at the start of the game?",
+                "value":"There is no way to do this without modifying the game files"
+            },{
+                "name":"How to actually do this",
+                "value":"You need to decompile the mod using 7-zip or winrar, and delete the text in the Lang file and replace it with alt+255"
             }]
         }
     }
