@@ -267,7 +267,7 @@ process.on("uncaughtException", (e) => {
 })
 
 async function sendError(code,e,color) {
-    const owner = await client.users.fetch("520961867368103936")
+    const owner = await client.users.fetch("552766239009931274")
     const embed = new EmbedBuilder()
         .setTitle(code)
         .setDescription(`${e}`)
