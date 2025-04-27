@@ -51,7 +51,7 @@ const commandFuncs = {};
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js') && file !== "template.js"); // ignore the template command
 const commandsEnabled = true;
 // bot client id needed here
-const clientId = "1360807782001148134"
+const clientId = "1366075877477322845"
 
 // load commands into discord
 if (commandsEnabled) {
