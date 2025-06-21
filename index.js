@@ -399,7 +399,7 @@ async function getSubscriberCount() {
     let slicedCount = subCount.slice(0, -2);
     finalCount = slicedCount.slice(0, -1) + '.' + slicedCount.slice(-1) + 'K';
 
-    channel.setName('Subscribers: ' + finalCount);
+    channel.setName('🎉︱Subscribers: ' + finalCount);
 }
 
 client.login(token[0])
