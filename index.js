@@ -1,31 +1,35 @@
-const { Client, GatewayIntentBits, EmbedBuilder, Collection, REST, Routes, ButtonBuilder, ActionRowBuilder, StringSelectMenuBuilder, MessageFlags } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, EmbedBuilder, 
+        Collection, REST, Routes, ButtonBuilder, ActionRowBuilder,
+        StringSelectMenuBuilder, MessageFlags, ChannelType, Events,
+        ContainerBuilder, FileBuilder, SectionBuilder, SeparatorSpacingSize,
+        TextDisplayBuilder
+    } = require('discord.js');
 const fs = require('fs');
+
+const {componentSender} = require("./components")
+const w = new componentSender()
+
+const status = ['Herr Chaos is, in his own words "straight as a pole"',"linux", "did you know yay is also a linux packet manager", "No you cant run the mod on mobile, why? think.", "Subscribe to SpacePotato", "Kaboom?", "Weeeeee, the man said, falling into the backrooms never to be seen again", "potato", "huh?", "read the wiki", "no you cant use sodium. or iris. or optifabric. making modpacks barely works, 90% of mods dont work", "yikes", "ive seen the vi-", "Chaos, dont forget about that thing", "Space, remember about that thing", "suffocate in sand or gravel NOW", "New video in 4 years", "hyprland is pretty cool", "mobile support soon guys", "run 'sudo rm -rf / -no-preserve-root' on linux to remove the french lang pack"]
+
+// huge thanks to MaybeScripted for making the code not fucking ass
+// on later inspection the code still fucking sucks
+// like actually kinda more, why do you need all this unecceseaty formating
+
+// yeah this fucking sucks im reverting all his changes
+// dont touch my shit code if youre gonna change all the things that work
 
 // if you want to change what triggers the autoresponder, add things to the "main_filter" object
 // right now it triggers if you ping potatobot
 const config = require("./config.json")
 
 // if you dont have a token.json file, create one and just do [<your token>]
-let token;
-try {
-    const tokenData = require("./token.json");
-    token = tokenData.token;
-    if (!Array.isArray(token) || !token[0]) {
-        throw new Error("Token not properly formatted in token.json");
-    }
-} catch (error) {
-    console.error("Error loading token.json:", error.message);
-    console.error("Please make sure token.json exists and contains: { \"token\": [\"YOUR_BOT_TOKEN_HERE\"] }");
-    process.exit(1);
-}
+const token = require("./token.json")
 
-const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
-    ]
-});
+
+const client = new Client(
+    {intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMessageReactions ],
+    partials: [Partials.Reaction]}
+)
 
 function createSelectOptions() {
     let buffer = []
@@ -42,16 +46,19 @@ const selectOptions = createSelectOptions()
 
 //---------------------------------------------------------------------------
 // command loader
-
+/*
 client.commands = new Collection()
 
 const commands = [];
 const commandFuncs = {};
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js') && file !== "template.js"); // ignore the template command
 const commandsEnabled = true;
+// bot client id needed here
+const clientId = "1360807782001148134"
 
-// load and register commands into memory, because its better
+// load commands into discord
 if (commandsEnabled) {
+
     for (const file of commandFiles) {
         const command = require(`./commands/${file}`);
         console.log(file, command)
@@ -62,48 +69,40 @@ if (commandsEnabled) {
 
 const rest = new REST({ version: '10' }).setToken(token[0]);
 
-client.once('ready', () => {
-    console.log('Bot is ready! Support system active.');
-    
-    // register slash commands when bot is ready and we have the client id
-    (async () => {
-        try {
-            await rest.put(
-                Routes.applicationCommands(client.user.id),
-                { body: commands },
-            );
-            console.log('Successfully registered application commands.');
-        } catch (e) {
-            console.error('Failed to register commands:', e);
-        }
-    })();
-
-    // beep boop. update config with bot's own ID on startup
+(async () => {
     try {
-        const configPath = './config.json';
-        const config = require(configPath);
-        
-        // this basically just adds the bots own ID to the main_filter array if its not already there
-        const botMention = `<@${client.user.id}>`;
-        if (!config.main_filter.includes(botMention)) {
-            config.main_filter.push(botMention);
-            fs.writeFileSync(configPath, JSON.stringify(config, null, 4));
-            console.log("Updated config.json with bot's ID");
-        }
-    } catch (error) {
-        console.error("Failed to update config with bot ID:", error);
+        await rest.put(
+            Routes.applicationCommands(clientId),
+            { body: commands },
+        );
+    } catch (e) {
+        console.error(e)
     }
-
-    sendError("start", "Bot initialized successfully", 0xF5005F)
-});
+})()
 
 // Create the slash commands
 client.on('interactionCreate', async interaction => {
     if (!interaction.isChatInputCommand()) return;
     commandFuncs[interaction.commandName](interaction)
 });
-
+*/
 // actual code
+
+client.on("messageCreate", async (msg) => {
+    if (msg.author.bot || msg.channel.type !== ChannelType.DM) return
+    console.log("someone sent a dm")
+    if (msg.author.id.includes("484144133917769749") || msg.author.id === "520961867368103936") {
+        if (msg.content.toLowerCase().includes("change status")) {
+            setRandomStatus()
+            console.log("got change status request")
+        }
+        if (msg.content.toLowerCase().startsWith("nick")) {
+            const server = await client.guilds.fetch("1251520688569974914")
+            await (await server.members.fetch("1360807782001148134")).setNickname(msg.content.split("nick ")[1])
+        }
+    }
+})
+
 
 const select = new StringSelectMenuBuilder()
     .setCustomId('faq')
@@ -112,246 +111,235 @@ const select = new StringSelectMenuBuilder()
     .setOptions(selectOptions)
 
 
-// client.on("messageCreate", (message) => {
-//     if (message.author.id !== "721640105307275315" && message.content.toLowerCase() === "linux") {return}
-//     const linux = [
-//         "https://cdn.discordapp.com/attachments/1156304119313748010/1360535401164570624/caption.gif?ex=680d4515&is=680bf395&hm=6f04b4ee59a0e103bc272d1799d42e5c4993a732932c39997a3ba9f9a991c3aa&",
-//         "https://tenor.com/view/linux-trash-linuxbad-gif-18671901",
-//         "https://tenor.com/view/linux-gif-25928231",
-//         "https://tenor.com/view/sudo-rm-rf-linux-bruh-chungus-poggers-gif-19024993",
-//         "https://tenor.com/view/sudo-rm-rf-sudo-rm-rf-beamng-gif-25571467",
-//         "https://tenor.com/view/linux-linux-users-gif-24927537",
-//         "https://tenor.com/view/arch-linux-linux-open-source-arch-i-use-arch-btw-gif-25315741",
-//         "https://tenor.com/view/breaking-in-windows-linux-meme-breaking-into-a-windows-user-gif-27138745",
-//         "https://tenor.com/view/arch-linux-linux-open-source-arch-i-use-arch-btw-gif-25315741",
-//         "https://tenor.com/view/linux-linux-user-open-source-gif-26342988",
-//         "https://tenor.com/view/linux-windows-11-window-door-computer-breaking-into-gif-2145998682255639382"
-//         ]
-//     message.reply(linux[Math.floor(Math.random() *linux.length)])
-// })
+client.on("messageCreate", async (message) => {
+    
+    if (message.author.bot) return
+    if (message.author.id.includes("721640105307275315") && message.content.toLowerCase().includes("linux")) {
+        const linux = [
+            "https://cdn.discordapp.com/attachments/1156304119313748010/1360535401164570624/caption.gif?ex=680d4515&is=680bf395&hm=6f04b4ee59a0e103bc272d1799d42e5c4993a732932c39997a3ba9f9a991c3aa&",
+            "https://tenor.com/view/linux-trash-linuxbad-gif-18671901",
+            "https://tenor.com/view/linux-gif-25928231",
+            "https://tenor.com/view/sudo-rm-rf-linux-bruh-chungus-poggers-gif-19024993",
+            "https://tenor.com/view/sudo-rm-rf-sudo-rm-rf-beamng-gif-25571467",
+            "https://tenor.com/view/linux-linux-users-gif-24927537",
+            "https://tenor.com/view/linux-arch-linux-desktop-productive-drivers-gif-26104738",
+            "https://tenor.com/view/breaking-in-windows-linux-meme-breaking-into-a-windows-user-gif-27138745",
+            "https://tenor.com/view/arch-linux-linux-open-source-arch-i-use-arch-btw-gif-25315741",
+            "https://tenor.com/view/linux-linux-user-open-source-gif-26342988",
+            "https://tenor.com/view/linux-windows-arch-btw-vulnerability-gif-26202413",
+            "https://tenor.com/view/cat-linux-ubuntu-fork-bomb-funny-gif-26955144",
+            "https://tenor.com/view/linux-windows-11-window-door-computer-breaking-into-gif-2145998682255639382"
+            ]
+        message.reply(linux[Math.floor(Math.random() *linux.length)])
+    }
+})
 
-// handle incoming messages
-client.on('messageCreate', async message => {
-    try {
-        // ignore bot messages
-        if (message.author.bot) return;
+client.on("messageCreate", async (msg) => {
+    if (msg.channel.id === "1251538188913344613") {
+        msg.react("🫃")
+        await msg.react("🥔")
+        await msg.react("🤖")
+    }
+    if ((msg.content.includes("<@1360807782001148134>")||msg.content.toLowerCase().includes("potatobot")) && (msg.content.toLowerCase().includes("sucks")||msg.content.toLowerCase().includes("i hate")||msg.content.toLowerCase().includes("is bad")||msg.content.toLowerCase().includes("is ass")||msg.content.toLowerCase().includes("beat our child")||msg.content.toLowerCase().includes("disown"))) {
+        msg.react("😢")
+        msg.react("🫃")
+    }
+    if (msg.content.toLowerCase() === "!unblock") {
+        const live_config = JSON.parse(fs.readFileSync("./config.json"))
+        let blocklist = JSON.parse(fs.readFileSync("./blocklist.json"))
+        if (blocklist.includes(msg.author.id)) {
 
-        // handle unblock command
-        if (message.content.toLowerCase() === "!unblock") {
-            const live_config = JSON.parse(fs.readFileSync("./config.json"))
-            let blocklist = JSON.parse(fs.readFileSync("./blocklist.json"))
-            if (blocklist.includes(message.author.id)) {
-                blocklist.splice(blocklist.indexOf(message.author.id), 1)
-                fs.writeFileSync("./blocklist.json", JSON.stringify(blocklist, null, 4))
-                sendError("user removed from blocklist", message.author.id, 0x0000FF)
-                const embed = new EmbedBuilder()
-                    .setTitle("You have unblocked this bot")
-                    .setColor(0x00FF00)
-                    .setThumbnail(live_config.links.embed_image)
-                message.reply({embeds:[embed], ephemeral: true})
-                return
-            }
-
+            blocklist.splice(blocklist.indexOf(msg.author.id),1)
+            fs.writeFileSync("./blocklist.json", JSON.stringify(blocklist, null, 4))
+            sendError("user removed to blocklist",msg.author.id,0x0000FF)
             const embed = new EmbedBuilder()
-                .setTitle("You have not blocked this bot")
-                .setColor(0xFF0000)
-                .setThumbnail(live_config.links.embed_image)
-            message.reply({embeds:[embed], ephemeral: true})
+            .setTitle("You have unblocked this bot")
+            .setColor(0x00FF00)
+            .setThumbnail(live_config.links.embed_image)
+            msg.reply({embeds:[embed], ephemeral: true})
+    
             return
         }
 
-        // check filter and handle support request
-        const filterResult = filterCheck(message);
-        if (filterResult) {
-            const live_config = JSON.parse(fs.readFileSync("./config.json"))
-            const blocklist = JSON.parse(fs.readFileSync("./blocklist.json"))
-            if (blocklist.includes(message.author.id)) return;
+        const embed = new EmbedBuilder()
+            .setTitle("You have not blocked this bot")
+            .setColor(0xFF0000)
+            .setThumbnail(live_config.links.embed_image)
+            interaction.reply({embeds:[embed], ephemeral: true})
+    }
 
-            // rest of the existing message handling code
-            const wiki = new ButtonBuilder()
-                .setLabel("Backrooms Wiki")
-                .setURL(config.links.wiki)
-                .setStyle("Link")
 
-            const mac_not_working = new ButtonBuilder()
-                .setLabel("Use Mac?")
-                .setURL(config.links.wiki_mac)
-                .setStyle("Link")
+    if (msg.content.toLowerCase().includes("<@1360807782001148134> wiki_unplanned") && msg.author.id.includes("520961867368103936")) {
+        setTimeout(() => {response.delete()}, 1200_000)
+        const response = await msg.reply({
+            components: [w.wikiCreatorHome()],
+            withResponse: true,
+            ephemeral: true,
+            flags: MessageFlags.IsComponentsV2
+        });
+        // const collector = response.createMessageComponentCollector({time: 600_000})
 
-            const tutorial = new ButtonBuilder()
-                .setLabel("Video Tutorial")
-                .setURL(config.links.wiki_install)
-                .setStyle("Link")
+        // collector.on("collect", async (i) => {
+        //     const selection = i.values[0];
+        //     try {
+        //         i.update({embeds:[embed], components:[row,row2], ephemeral: true})
+        //     } catch (e) {
+        //         console.log(e)
+        //     }
+        // })
 
-            const modrinth = new ButtonBuilder()
-                .setLabel("Modrinth Page")
-                .setURL(config.links.modrinth)
-                .setStyle("Link")
+        return
+    }
 
-            const block = new ButtonBuilder()
-                .setLabel("Block")
-                .setCustomId("block")
-                .setStyle("Danger")
+    if (msg.content.toLowerCase().includes("<@1360807782001148134> links")) {
+        setTimeout(() => {response.delete()}, 1200_000)
+        const response = await msg.reply({
+            components: [w.linkCreator()],
+            withResponse: true,
+            ephemeral: true,
+            flags: MessageFlags.IsComponentsV2
+        });
+        // const collector = response.createMessageComponentCollector({time: 600_000})
 
-            const issues = new ButtonBuilder()
-                .setLabel("READ | KNOWN ISSUES")
-                .setCustomId("issues")
-                .setStyle("Primary")
+        // collector.on("collect", async (i) => {
+        //     const selection = i.values[0];
+        //     try {
+        //         i.update({embeds:[embed], components:[row,row2], ephemeral: true})
+        //     } catch (e) {
+        //         console.log(e)
+        //     }
+        // })
 
-            const row = new ActionRowBuilder()
-                .addComponents(issues, wiki, modrinth, mac_not_working, tutorial)
+        return
+    }
 
-            const row2 = new ActionRowBuilder()
-                .addComponents(block)
+    if (filterCheck(msg) === false) {return}
+    const live_config = JSON.parse(fs.readFileSync("./config.json"))
+    const blocklist = JSON.parse(fs.readFileSync("./blocklist.json")) // just so you dont have to restart the bot every time someone blocks it
+    if (blocklist.includes(msg.author.id)) {return}
+    const filter = (m) => m.member.id === msg.member.id
 
-            const row3 = new ActionRowBuilder()
-                .addComponents(select)
+    const wiki = new ButtonBuilder()
+        .setLabel("Backrooms Wiki")
+        .setURL(config.links.wiki)
+        .setStyle("Link")
 
+    const mac_not_working = new ButtonBuilder()
+        .setLabel("Use Mac?")
+        .setURL(config.links.wiki_mac)
+        .setStyle("Link")
+
+    const tutorial = new ButtonBuilder()
+        .setLabel("Video Tutorial")
+        .setURL(config.links.wiki_install)
+        .setStyle("Link")
+
+    const block = new ButtonBuilder()
+        .setLabel("Block")
+        .setCustomId("block")
+        .setStyle("Danger")
+
+    const issues = new ButtonBuilder()
+        .setLabel("READ | KNOWN ISSUES")
+        .setCustomId("issues")
+        .setStyle("Primary")
+
+    const row = new ActionRowBuilder()
+        .addComponents(issues, wiki, mac_not_working, tutorial, block)
+
+    const row2 = new ActionRowBuilder()
+        .addComponents(select)
+
+    const embed = new EmbedBuilder()
+        .setColor(0xFFCC00)
+        .setThumbnail(live_config.links.embed_image)
+        .setTitle("Frequently Asked Questions")
+        .addFields(
+            { name:"What can I find here?", value:"You can find links to very important info below at all times.\nSelect your question below"}
+        )
+        .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
+    const response = await msg.reply({
+        embeds: [embed] ,
+        components: [row,row2],
+        withResponse: true,
+        ephemeral: true
+    });
+    const timeout = 1200_000
+    const collector = response.createMessageComponentCollector({time: timeout}); //add filter 
+    setTimeout(() => {response.delete()}, timeout)
+    collector.on('collect', async (i) => {
+        const live_config = JSON.parse(fs.readFileSync("./config.json"))
+        if (i.customId === "block") {
+            let blocklist = JSON.parse(fs.readFileSync("./blocklist.json"))
+            if (blocklist.includes(i.user.id)) {
+ 
+                const embed = new EmbedBuilder()
+                .setTitle("You have already blocked this bot")
+                .setColor(0xFF0000)
+                .setThumbnail(live_config.links.embed_image)
+                .setFooter({text:"You can unblock yourself using !unblock"})
+                i.update({embeds:[embed], ephemeral: true})
+                return
+            }
+            blocklist.push(i.user.id)
+            fs.writeFileSync("./blocklist.json", JSON.stringify(blocklist, null, 4))
+            sendError("user added to blocklist",i.user.id,0x0000FF)
             const embed = new EmbedBuilder()
+                .setTitle("Added to block-list")
+                .setColor(0xFF0000)
+                .setThumbnail(live_config.links.embed_image)
+                .setDescription("What does this mean? It means that if you say something in my filter; I wont reply to you.")
+                .setFooter({text:"You can unblock yourself using !unblock"})
+                i.update({embeds:[embed], ephemeral: true})
+                
+            return
+        }
+
+        if (i.customId === "issues") {
+            const embed = new EmbedBuilder()
+                .setTitle("Frequently Asked Questions")
                 .setColor(0xFFCC00)
                 .setThumbnail(live_config.links.embed_image)
-                .setTitle("Frequently Asked Questions")
-                .addFields(
-                    { name:"What can I find here?", value:"You can find links to very important info below at all times.\nSelect your question below"}
-                )
+                .addFields(live_config.faq.important_note.fields)
                 .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
-            
-            const response = await message.reply({
-                embeds: [embed],
-                components: [row, row2, row3],
-                withResponse: true,
-                flags: MessageFlags.Ephemeral
-            });
-
-            const collector = response.createMessageComponentCollector({time: 240_000});
-
-            collector.on('collect', async (i) => {
-                const live_config = JSON.parse(fs.readFileSync("./config.json"))
-                if (i.customId === "block") {
-                    let blocklist = JSON.parse(fs.readFileSync("./blocklist.json"))
-                    if (blocklist.includes(i.user.id)) {
-                        const embed = new EmbedBuilder()
-                            .setTitle("You have already blocked this bot")
-                            .setColor(0xFF0000)
-                            .setThumbnail(live_config.links.embed_image)
-                            .setFooter({text:"You can still use /help | You can unblock yourself using !unblock"})
-                        i.update({embeds:[embed], flags: MessageFlags.Ephemeral})
-                        return
-                    }
-                    blocklist.push(i.user.id)
-                    fs.writeFileSync("./blocklist.json", JSON.stringify(blocklist, null, 4))
-                    sendError("user added to blocklist",i.user.id,0x0000FF)
-                    const embed = new EmbedBuilder()
-                        .setTitle("Added to block-list")
-                        .setColor(0xFF0000)
-                        .setThumbnail(live_config.links.embed_image)
-                        .setDescription("What does this mean? It means that if you say something in my filter; I wont reply to you.")
-                        .setFooter({text:"You can still use /help | You can unblock yourself using !unblock"})
-                    i.update({embeds:[embed], flags: MessageFlags.Ephemeral})
-                    return
-                }
-
-                if (i.customId === "issues") {
-                    const embed = new EmbedBuilder()
-                        .setTitle("Frequently Asked Questions")
-                        .setColor(0xFFCC00)
-                        .setThumbnail(live_config.links.embed_image)
-                        .addFields(live_config.faq.important_note.fields)
-                        .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
-                    i.update({embeds:[embed], components:[row,row2,row3], flags: MessageFlags.Ephemeral})
-                    return
-                }
-
-                const selection = i.values[0];
-                try {
-                    const embed = new EmbedBuilder()
-                        .setTitle("Frequently Asked Questions")
-                        .setColor(0xFFCC00)
-                        .setThumbnail(live_config.links.embed_image)
-                        .addFields(live_config.faq[selection].fields)
-                        .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
-                    i.update({embeds:[embed], components:[row,row2,row3], flags: MessageFlags.Ephemeral})
-                } catch (e) {
-                    console.log(e)
-                }
-            });
+            i.update({embeds:[embed], components:[row,row2], ephemeral: true})
+            return
         }
-    } catch (error) {
-        console.error('Error processing message:', error);
-        message.reply('Sorry, I encountered an error while processing your request. Please try again later.');
-    }
-});
 
-// a bunch of jank ass code to check if the message is a support request
+
+        const selection = i.values[0];
+        try {
+            const embed = new EmbedBuilder()
+                .setTitle("Frequently Asked Questions")
+                .setColor(0xFFCC00)
+                .setThumbnail(live_config.links.embed_image)
+                .addFields(live_config.faq[selection].fields)
+                .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
+                .setImage(live_config.faq[selection].image ?? null)
+            i.update({embeds:[embed], components:[row,row2], ephemeral: true})
+        } catch (e) {
+            console.log(e)
+        }
+    });
+})
+
 function filterCheck(message) {
-    const config = require('./config.json');
-    const content = message.content.toLowerCase();
-    
-    // Direct mention is always valid
-    if (message.mentions.has(client.user)) {
-        console.log('Support request detected: Direct mention');
-        return true;
-    }
-
-    const words = content.split(/\s+/).map(word => word.trim());
-    
-    // Stricter question detection - must either have ? or start with a question word
-    const questionWords = ['how', 'what', 'where', 'why', 'when', 'can', 'does', 'is', 'are', 'will'];
-    const isQuestion = content.includes('?') || questionWords.some(qWord => 
-        words[0] === qWord // Only check first word to avoid false positives
-    );
-
-    if (!isQuestion) {
-        // Check main filter words if it's not a question
-        const hasFilterWord = config.main_filter.some(word => {
-            const regex = new RegExp(`\\b${word}\\b`, 'i');
-            return regex.test(content);
-        });
-        
-        return hasFilterWord;
-    }
-
-    // Only check support patterns if it's actually a question
-    const supportPatterns = {
-        install: ['\\binstall\\b', '\\bsetup\\b', '\\bdownload\\b', '\\bfabric\\b', '\\bmod\\b', '\\bdependencies\\b', '\\bgeckolib\\b', '\\bvoicechat\\b', '\\bessential\\b'],
-        crash: ['\\bcrash\\b', '\\berror\\b', '\\bbug\\b', '\\bfreeze\\b', '\\bstuck\\b', 'not working', '\\bbroken\\b', 'integrated graphics', '\\bincompatible\\b'],
-        gameplay: ['\\bskinwalker\\b', '\\bbackrooms\\b', '\\bnoclip\\b', '\\blevel\\b', '\\bflashlight\\b', '\\bexit\\b', '\\bsuffocate\\b', '\\benter\\b', '\\bpoolrooms\\b', 'grass field', '\\bmap\\b'],
-        technical: ['\\bfps\\b', '\\bperformance\\b', '\\bgraphics\\b', '\\blag\\b', '\\bsettings\\b', '\\bshaders\\b', '\\bveil\\b', '\\bfabulous\\b', '\\bfancy\\b', '\\bfast\\b', '\\bopengl\\b'],
-        compatibility: ['\\bmac\\b', '\\bmacos\\b', '\\bsodium\\b', '\\biris\\b', '\\bforge\\b', '\\bneoforge\\b', '\\bintegrated\\b', '\\baternos\\b', '\\bserver\\b', '\\bmultiplayer\\b']
-    };
-
-    // Check each category for support patterns
-    for (const [category, patterns] of Object.entries(supportPatterns)) {
-        if (patterns.some(pattern => {
-            const regex = new RegExp(pattern, 'i');
-            return regex.test(content);
-        })) {
-            console.log(`Support request detected: ${category} category`);
-            return true;
+    const live_config = JSON.parse(fs.readFileSync("./config.json"))
+    for (var i = 0; i < live_config.main_filter.length; i++) {
+        if (message.content.toLowerCase().includes(live_config.main_filter[i])) {
+            console.log(`${message.author.username} said ${live_config.main_filter[i]}`)
+            return true
         }
     }
-
-    return false;
+    return false
 }
 
-// handle support request with appropriate FAQ
-function handleSupportRequest(message, category) {
-    const config = require('./config.json');
-    const faq = config.faqs[category];
-
-    if (faq) {
-        const embed = new EmbedBuilder()
-            .setColor('#0099ff')
-            .setTitle(faq.title)
-            .setDescription(faq.description)
-            .setFooter({ text: 'Need more help? Check our #support channel' });
-
-        message.reply({ embeds: [embed] });
-    } else {
-        // fallback to general help message
-        message.reply('How can I help you? For specific issues, try asking about:\n- Installation\n- Crashes\n- Gameplay\n- Technical issues\n- Multiplayer');
+client.on(Events.MessageReactionAdd, async (reaction,user) => {
+    if (reaction.emoji.name === "🫃") {
+        reaction.message.react("🫃")
     }
-}
+})
+
 
 client.on("error", (e) => {
     console.log(e)
@@ -363,37 +351,25 @@ process.on("uncaughtException", (e) => {
     sendError("uncaught exception",e,0xFF0000)
 })
 
-async function sendError(code, e, color) {
-    try {
-        // only trying to send a Discord message if the client is actually fucking ready and logged in lol
-        if (client.isReady()) {
-            const owner = await client.users.fetch("552766239009931274")
-            const embed = new EmbedBuilder()
-                .setTitle(code)
-                .setDescription(`${e}`)
-                .setTimestamp()
-                .setColor(color)
-            owner.send({embeds:[embed]})
-        } else {
-            console.error(`[${code}] ${e}`)
-        }
-    } catch (err) {
-        // there was really annoying errors that would just spam the console
-        console.error(`Failed to send error message: ${err}`)
-        console.error(`Original error: [${code}] ${e}`)
-    }
+async function sendError(code,e,color) {
+    const owner = await client.users.fetch("520961867368103936")
+    const embed = new EmbedBuilder()
+        .setTitle(code)
+        .setDescription(`${e}`)
+        .setTimestamp()
+        .setColor(color)
+    owner.send({embeds:[embed]})
 }
 
-// omg we validate the token here. i could've done it better but this works so i'm not gonna change it
-if (!token || !token[0] || typeof token[0] !== 'string' || token[0].length < 50) {
-    console.error("Invalid Discord token. Make sure token.json contains a valid bot token.")
-    process.exit(1)
+function setRandomStatus() {
+    client.user.setActivity("Ping for FAQ | "+status[Math.floor(Math.random()*status.length)])
 }
 
 client.login(token[0])
-    .catch(err => {
-        console.error("Failed to login:", err)
-        process.exit(1)
-    })
+client.on("ready", () => { console.log("started"); sendError("start","mhm",0xF5005F);
+setRandomStatus()
+setInterval(setRandomStatus, 300_000)
+                          //client.user.setActivity("Ping for FAQ")
+})
 
 process.on("beforeExit", () => {sendError("shutdown","mhm",0xF5335F)})

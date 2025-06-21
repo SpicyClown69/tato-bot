@@ -1,23 +1,16 @@
 {
     "links": {
-        "embed_image": "https://cdn.discordapp.com/attachments/1156304119313748010/1156304119565574174/backrooms_logo.png",
-        "wiki": "https://backrooms-mod.fandom.com/wiki/Backrooms_Mod_Wiki",
-        "wiki_enter_backrooms": "https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#entering-the-backrooms",
-        "wiki_dependencies": "https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info",
-        "wiki_multiplayer": "https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#multiplayer",
-        "wiki_mac": "https://backrooms-mod.fandom.com/wiki/Mac_Installation",
-        "wiki_install": "https://backrooms-mod.fandom.com/wiki/Installation",
+        "embed_image": "https://cdn.discordapp.com/attachments/1361390588523712512/1367576285789814864/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.png?ex=6815162a&is=6813c4aa&hm=033e5957be17f3f9c777d5b8523a7d4b4e66233115937e755ea8ffe2ad00c3b2&",
+        "wiki":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki",
+        "wiki_enter_backrooms":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#entering-the-backrooms",
+        "wiki_dependencies":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info",
+        "wiki_multiplayer":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#multiplayer",
+        "wiki_mac":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info#incompatibilities",
+        "wiki_install":"https://youtu.be/89AWIz0RtFw",
         "modrinth": "https://modrinth.com/mod/backrooms"
     },
     "main_filter": [
-        "help",
-        "support",
-        "mod",
-        "backrooms",
-        "found footage",
-        "spb",
-        "footage",
-        "<@1366075877477322845>"
+        "<@1360807782001148134>"
     ],
     "faq": {
         "important_note": {
@@ -26,13 +19,14 @@
                     "name": "KNOWN UNSOLVABLE ISSUES",
                     "value": "• The mod does NOT work with integrated graphics\n• The mod does NOT work on MacOS (due to OpenGL requirements)\n• The mod does NOT work with Sodium, Iris or any other performance mod that changes rendering\n• The mod does NOT work on Forge or Neoforge\n• The mod requires Fabric loader\n• Do NOT use Fabulous! graphics - only Fast or Fancy work\n\nThese issues CANNOT be fixed as they are engine limitations!"
                 }
-            ]
+            ],
+            "image":"https://cdn.discordapp.com/attachments/1345899658974728356/1367537156335206400/Integrated.png?ex=6814f1b9&is=6813a039&hm=6f68c339439a242e9fc7b5a1dfaca8b006b4578fe50cecdad45ee30085f437ce&"
         },
         "dependencies": {
             "fields": [
                 {
                     "name": "What do I need to install?",
-                    "value": "Required dependencies for Minecraft 1.20.1:\n• Fabric API (any version)\n• Simple Voice Chat (1.20.1-2.4.32 or later)\n• GeckoLib (4.4.9 or later)\n• Veil (included in the mod)\n\nMake sure you're using Fabric loader, NOT Forge/Neoforge!"
+                    "value": "Required dependencies for Minecraft 1.20.1:\n• Fabric API (any version)\n• Simple Voice Chat (1.20.1-2.4.32 or later)\n• GeckoLib (4.4.9 or later)\n\nMake sure you're using Fabric loader, NOT Forge/Neoforge!"
                 }
             ]
         },
@@ -136,7 +130,7 @@
             "fields": [
                 {
                     "name": "How do I install the mod?",
-                    "value": "https://backrooms-mod.fandom.com/wiki/Installation"
+                    "value": "https://youtu.be/89AWIz0RtFw"
                 }
             ]
         },
@@ -184,11 +178,7 @@
             "fields": [
                 {
                     "name": "Is there a way to remove the hint at the start of the game?",
-                    "value": "There is no way to do this without modifying the game files"
-                },
-                {
-                    "name": "How to actually do this",
-                    "value": "You need to download the mod's source code and edit it to remove the messages, the source code is available on GitHub."
+                    "value": "You can change the option to enable / disable it in the mod settings (requires modmenu to see)"
                 }
             ]
         }
