@@ -9,7 +9,29 @@ const fs = require('fs');
 const {componentSender} = require("./components")
 const w = new componentSender()
 
-const status = ['Herr Chaos is, in his own words "straight as a pole"',"linux", "did you know yay is also a linux packet manager", "No you cant run the mod on mobile, why? think.", "Subscribe to SpacePotato", "Kaboom?", "Weeeeee, the man said, falling into the backrooms never to be seen again", "potato", "huh?", "read the wiki", "no you cant use sodium. or iris. or optifabric. making modpacks barely works, 90% of mods dont work", "yikes", "ive seen the vi-", "Chaos, dont forget about that thing", "Space, remember about that thing", "suffocate in sand or gravel NOW", "New video in 4 years", "hyprland is pretty cool", "mobile support soon guys", "run 'sudo rm -rf / -no-preserve-root' on linux to remove the french lang pack"]
+const status = [
+    'Herr Chaos is, in his own words "straight as a pole"',
+    "linux", 
+    "did you know yay is also a linux packet manager", 
+    "No you cant run the mod on mobile, why? think.", 
+    "Subscribe to SpacePotato", 
+    "Kaboom?", 
+    "\"WOOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooo..........\" -He said as he fell into the backrooms, never to be seen again.", 
+    "potato", 
+    "huh?", 
+    "read the wiki", 
+    "no you cant use sodium. or iris. or optifabric. making modpacks barely works, 90% of mods dont work", 
+    "yikes", 
+    "ive seen the vi-", 
+    "Chaos, dont forget about that thing", 
+    "Space, remember about that thing", 
+    "suffocate in sand or gravel NOW", 
+    "New video in 4 years", 
+    "hyprland is pretty cool", 
+    "mobile support soon guys", 
+    "run 'sudo rm -rf / -no-preserve-root' on linux to remove the french lang pack",
+    "Chaos vibrates his nose when he talks"
+]
 
 // huge thanks to MaybeScripted for making the code not fucking ass
 // on later inspection the code still fucking sucks
@@ -365,10 +387,28 @@ function setRandomStatus() {
     client.user.setActivity("Ping for FAQ | "+status[Math.floor(Math.random()*status.length)])
 }
 
+async function getSubscriberCount() {
+    const server = await client.guilds.fetch("1251520688569974914");
+    const channel = await server.channels.fetch("1382364642499887195");
+
+
+    const result = await fetch('https://www.googleapis.com/youtube/v3/channels?key='+token[1]+'&part=statistics&forHandle=SpacePotatoee');
+    const text = await result.json();
+
+    let subCount = text['items'][0]['statistics']['subscriberCount'];
+    let slicedCount = subCount.slice(0, -2);
+    finalCount = slicedCount.slice(0, -1) + '.' + slicedCount.slice(-1) + 'K';
+
+    channel.setName('Subscribers: ' + finalCount);
+}
+
 client.login(token[0])
 client.on("ready", () => { console.log("started"); sendError("start","mhm",0xF5005F);
 setRandomStatus()
 setInterval(setRandomStatus, 300_000)
+
+getSubscriberCount()
+setInterval(getSubscriberCount, 3_600_000)
                           //client.user.setActivity("Ping for FAQ")
 })
 
