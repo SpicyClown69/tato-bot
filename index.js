@@ -33,15 +33,6 @@ const status = [
     "Chaos vibrates his nose when he talks"
 ]
 
-// huge thanks to MaybeScripted for making the code not fucking ass
-// on later inspection the code still fucking sucks
-// like actually kinda more, why do you need all this unecceseaty formating
-
-// yeah this fucking sucks im reverting all his changes
-// dont touch my shit code if youre gonna change all the things that work
-
-// if you want to change what triggers the autoresponder, add things to the "main_filter" object
-// right now it triggers if you ping potatobot
 const config = require("./config.json")
 
 // if you dont have a token.json file, create one and just do [<your token>]
