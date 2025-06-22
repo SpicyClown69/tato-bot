@@ -39,8 +39,16 @@ const config = require("./config.json")
 const token = require("./token.json")
 
 
+
 const client = new Client(
-    {intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMessageReactions ],
+    {intents: [
+        GatewayIntentBits.Guilds, 
+        GatewayIntentBits.MessageContent, 
+        GatewayIntentBits.GuildMessages, 
+        GatewayIntentBits.DirectMessages, 
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMembers
+    ],
     partials: [Partials.Reaction]}
 )
 
@@ -59,7 +67,7 @@ const selectOptions = createSelectOptions()
 
 //---------------------------------------------------------------------------
 // command loader
-/*
+
 client.commands = new Collection()
 
 const commands = [];
@@ -98,8 +106,6 @@ client.on('interactionCreate', async interaction => {
     if (!interaction.isChatInputCommand()) return;
     commandFuncs[interaction.commandName](interaction)
 });
-*/
-
 
 // actual code
 
@@ -135,7 +141,7 @@ client.on('guildMemberAdd', async (member) => {
     const embed = new EmbedBuilder()
         .setColor(0xFFCC00)
         .setTitle("Welcome " + member.displayName + " to the Space Fries Discord!")
-        .setThumbnail(member.avatarURL())
+        .setThumbnail(member.user.avatarURL())
         .addFields(
             { name:"Make sure to check out the " + rulesChannel.url + " first", value: "You are the " + newUserCount + " member to join the server"}
         )
