@@ -107,6 +107,7 @@ client.on('interactionCreate', async interaction => {
 client.on('guildMemberAdd', async (member) => {
     if(member.bot) return;
 
+    console.log(member.displayName + " joined the server!");
     const server = member.guild;
     const welcomeChannel = server.systemChannel;
     const rulesChannel = server.rulesChannel;
@@ -432,8 +433,10 @@ async function getSubscriberCount() {
     let subCount = text['items'][0]['statistics']['subscriberCount'];
     let slicedCount = subCount.slice(0, -2);
     finalCount = slicedCount.slice(0, -1) + '.' + slicedCount.slice(-1) + 'K';
-
-    channel.setName('🎉︱Subscribers: ' + finalCount);
+    
+    await channel.setName('🎉︱Subscribers: ' + finalCount);
+    
+    console.log("Updated the sub count to " + finalCount);
 }
 
 client.login(token[0])
