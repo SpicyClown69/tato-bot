@@ -453,7 +453,7 @@ async function getSubscriberCount() {
 }
 
 client.login(token[0])
-client.on("ready", () => { console.log("started"); sendError("start","mhm",0xF5005F);
+client.on("ready", () => { console.log("started"); sendError("start","mhm",0x00FF00);
 setRandomStatus()
 setInterval(setRandomStatus, 300_000) // Set a random status every 5 minutes
 
