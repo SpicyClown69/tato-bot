@@ -170,7 +170,7 @@
             "fields": [
                 {
                     "name": "Is there a command to get to the next level?",
-                    "value": "execute in spb-revamped:<level> run tp ~ ~ ~"
+                    "value": "/level <level>"
                 }
             ]
         },
