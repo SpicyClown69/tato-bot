@@ -149,13 +149,10 @@ client.on('guildMemberAdd', async (member) => {
             { name:"Make sure to check out the " + rulesChannel.url + " first", value: "You are the " + newUserCount + " member to join the server"}
         )
 
-    await welcomeChannel.send("<@" + member.user.id + ">");
     const welcomeMessage = await welcomeChannel.send({
+        content: "<@" + member.user.id + ">",
         embeds: [embed]
     });
-
-    welcomeMessage.react('🎉');
-    welcomeMessage.react('🔥');
 })
 
 client.on("messageCreate", async (msg) => {
