@@ -99,7 +99,50 @@ client.on('interactionCreate', async interaction => {
     commandFuncs[interaction.commandName](interaction)
 });
 */
+
+
 // actual code
+
+//Welcome
+client.on('guildMemberAdd', async (member) => {
+    if(member.bot) return;
+
+    const server = member.guild;
+    const welcomeChannel = server.systemChannel;
+    const rulesChannel = server.rulesChannel;
+    
+    let newUserCount = server.memberCount.toString();
+    let countString = "";
+    
+    switch (newUserCount.charAt(newUserCount.length - 1)) {
+        case '1':
+            countString = "st";
+            break;
+        case '2':
+            countString = "nd";
+            break;
+        case '3':
+            countString = "rd";
+            break;
+        default:
+            countString = "th";
+            break;
+    }
+
+    newUserCount = newUserCount + countString;
+
+    const embed = new EmbedBuilder()
+        .setColor(0xFFCC00)
+        .setTitle("Welcome " + member.displayName + " to the Space Fries Discord!")
+        .setThumbnail(member.avatarURL())
+        .addFields(
+            { name:"Make sure to check out the " + rulesChannel.url + " first", value: "You are the " + newUserCount + " member to join the server"}
+        )
+
+    await welcomeChannel.send({
+        embeds: [embed]
+    });
+})
 
 client.on("messageCreate", async (msg) => {
     if (msg.author.bot || msg.channel.type !== ChannelType.DM) return
@@ -396,11 +439,11 @@ async function getSubscriberCount() {
 client.login(token[0])
 client.on("ready", () => { console.log("started"); sendError("start","mhm",0xF5005F);
 setRandomStatus()
-setInterval(setRandomStatus, 300_000)
+setInterval(setRandomStatus, 300_000) // Set a random status every 5 minutes
 
 getSubscriberCount()
-setInterval(getSubscriberCount, 3_600_000)
-                          //client.user.setActivity("Ping for FAQ")
+setInterval(getSubscriberCount, 3_600_000)  // Update the subscriber counter every hour
+
 })
 
 process.on("beforeExit", () => {sendError("shutdown","mhm",0xF5335F)})
