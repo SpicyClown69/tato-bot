@@ -149,9 +149,12 @@ client.on('guildMemberAdd', async (member) => {
             { name:"Make sure to check out the " + rulesChannel.url + " first", value: "You are the " + newUserCount + " member to join the server"}
         )
 
-    await welcomeChannel.send({
+    await welcomeChannel.send("<@" + member.user.id + ">");
+    const welcomeMessage = await welcomeChannel.send({
         embeds: [embed]
     });
+
+    welcomeMessage.react('🔥');
 })
 
 client.on("messageCreate", async (msg) => {
@@ -217,7 +220,7 @@ client.on("messageCreate", async (msg) => {
 
             blocklist.splice(blocklist.indexOf(msg.author.id),1)
             fs.writeFileSync("./blocklist.json", JSON.stringify(blocklist, null, 4))
-            sendError("user removed to blocklist",msg.author.id,0x0000FF)
+            sendError("User removed from blocklist",msg.author.id,0x0000FF)
             const embed = new EmbedBuilder()
             .setTitle("You have unblocked this bot")
             .setColor(0x00FF00)
@@ -453,7 +456,7 @@ async function getSubscriberCount() {
 }
 
 client.login(token[0])
-client.on("ready", () => { console.log("started"); sendError("start","mhm",0x00FF00);
+client.on("ready", () => { console.log("started"); sendError("Started PotatoBot","mhm",0x00FF00);
 setRandomStatus()
 setInterval(setRandomStatus, 300_000) // Set a random status every 5 minutes
 
@@ -462,4 +465,4 @@ setInterval(getSubscriberCount, 3_600_000)  // Update the subscriber counter eve
 
 })
 
-process.on("beforeExit", () => {sendError("shutdown","mhm",0xF5335F)})
+process.on("beforeExit", () => {sendError("Shutdown PotatoBot","mhm",0xF5335F)})
