@@ -154,6 +154,7 @@ client.on('guildMemberAdd', async (member) => {
         embeds: [embed]
     });
 
+    welcomeMessage.react('🎉');
     welcomeMessage.react('🔥');
 })
 
@@ -204,11 +205,6 @@ client.on("messageCreate", async (message) => {
 })
 
 client.on("messageCreate", async (msg) => {
-    if (msg.channel.id === "1251538188913344613") {
-        msg.react("🫃")
-        await msg.react("🥔")
-        await msg.react("🤖")
-    }
     if ((msg.content.includes("<@1360807782001148134>")||msg.content.toLowerCase().includes("potatobot")) && (msg.content.toLowerCase().includes("sucks")||msg.content.toLowerCase().includes("i hate")||msg.content.toLowerCase().includes("is bad")||msg.content.toLowerCase().includes("is ass")||msg.content.toLowerCase().includes("beat our child")||msg.content.toLowerCase().includes("disown"))) {
         msg.react("😢")
         msg.react("🫃")
