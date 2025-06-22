@@ -38,6 +38,9 @@ const config = require("./config.json")
 // if you dont have a token.json file, create one and just do [<your token>]
 const token = require("./token.json")
 
+//Who to send error reports to
+const maintainers = require("./maintainers.json")
+
 
 
 const client = new Client(
@@ -415,13 +418,17 @@ process.on("uncaughtException", (e) => {
 })
 
 async function sendError(code,e,color) {
-    const owner = await client.users.fetch("520961867368103936")
-    const embed = new EmbedBuilder()
+    for(let i = 0; i < maintainers.length; i++){
+        const maintainer = await client.users.fetch(maintainers[i])
+
+        const embed = new EmbedBuilder()
         .setTitle(code)
         .setDescription(`${e}`)
         .setTimestamp()
         .setColor(color)
-    owner.send({embeds:[embed]})
+        
+        maintainer.send({embeds:[embed]})
+    }
 }
 
 function setRandomStatus() {
