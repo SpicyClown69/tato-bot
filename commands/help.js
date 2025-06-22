@@ -69,8 +69,7 @@ const func = async (interaction) => {
             ephemeral: true
         });
         const timeout = 1200_000
-        const collector = response.resource.message.createMessageComponentCollector({ time: 240_000});
-        setTimeout(() => {response.delete()}, timeout)
+        const collector = response.resource.message.createMessageComponentCollector({ time: timeout});
         collector.on('collect', async (i) => {
             const live_config = JSON.parse(fs.readFileSync("./config.json"))
 
