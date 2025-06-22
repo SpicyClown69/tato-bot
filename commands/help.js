@@ -17,16 +17,17 @@ const data = new SlashCommandBuilder()
 	.setName('help')
 	.setDescription("sends the help message for the mod")
 const func = async (interaction) => {
+
+    const select = new StringSelectMenuBuilder()
+        .setCustomId('faq')
+        .setPlaceholder('Select a Question')
+        //.setOptions(selectOptions.map(question => { return { label:question.label.toString(), value:question.value.toString()}}))
+        .setOptions(selectOptions)
+    
+    
 	try {
         const live_config = JSON.parse(fs.readFileSync("./config.json"))
-        const filter = (i) => i.member.id === interaction.member.id
-        const select = new StringSelectMenuBuilder()
-            .setCustomId('faq')
-            .setPlaceholder('Select a Question')
-            //.setOptions(selectOptions.map(question => { return { label:question.label.toString(), value:question.value.toString()}}))
-            .setOptions(selectOptions)
 
-        
         const wiki = new ButtonBuilder()
             .setLabel("Backrooms Wiki")
             .setURL(config.links.wiki)
@@ -42,19 +43,14 @@ const func = async (interaction) => {
             .setURL(config.links.wiki_install)
             .setStyle("Link")
 
-        const modrinth = new ButtonBuilder()
-            .setLabel("Modrinth Page")
-            .setURL(config.links.modrinth)
-            .setStyle("Link")
-
         const issues = new ButtonBuilder()
             .setLabel("READ | KNOWN ISSUES")
             .setCustomId("issues")
             .setStyle("Primary")
-    
+
         const row = new ActionRowBuilder()
-            .addComponents(issues, wiki, modrinth, mac_not_working, tutorial)
-    
+            .addComponents(issues, wiki, mac_not_working, tutorial)
+
         const row2 = new ActionRowBuilder()
             .addComponents(select)
 
@@ -65,18 +61,19 @@ const func = async (interaction) => {
             .addFields(
                 { name:"What can I find here?", value:"You can find links to very important info below at all times.\nSelect your question below"}
             )
-        
+            .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
         const response = await interaction.reply({
             embeds: [embed] ,
             components: [row,row2],
             withResponse: true,
             ephemeral: true
         });
-
-        const collector = response.resource.message.createMessageComponentCollector({ filter: filter, time: 240_000});
-
+        const timeout = 1200_000
+        const collector = response.resource.message.createMessageComponentCollector({ time: 240_000});
+        setTimeout(() => {response.delete()}, timeout)
         collector.on('collect', async (i) => {
             const live_config = JSON.parse(fs.readFileSync("./config.json"))
+
             if (i.customId === "issues") {
                 const embed = new EmbedBuilder()
                     .setTitle("Frequently Asked Questions")
@@ -86,13 +83,16 @@ const func = async (interaction) => {
                 i.update({embeds:[embed], components:[row,row2], ephemeral: true})
                 return
             }
+
+
             const selection = i.values[0];
             try {
                 const embed = new EmbedBuilder()
                     .setTitle("Frequently Asked Questions")
                     .setColor(0xFFCC00)
-                    .setThumbnail("https://cdn.modrinth.com/data/H6pjI7Ol/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.webp")
+                    .setThumbnail(live_config.links.embed_image)
                     .addFields(live_config.faq[selection].fields)
+                    .setImage(live_config.faq[selection].image ?? null)
                 i.update({embeds:[embed], components:[row,row2], ephemeral: true})
             } catch (e) {
                 console.log(e)
