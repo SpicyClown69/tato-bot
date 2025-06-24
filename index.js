@@ -152,9 +152,8 @@ client.on("ready", async () => {
     console.log("started");
     pb.sendError("Started PotatoBot","mhm",0x00FF00);
 
-    //! this works normally but errors when being a timed thingymajig im too tired for this
     pb.setRandomStatus()
-    // setInterval(pb.setRandomStatus, 300_000) // Set a random status every 5 minutes
+    setInterval(()=>(pb.setRandomStatus()),300_000) // Set a random status every 5 minutes
 
     getSubscriberCount()
     setInterval(getSubscriberCount, 3_600_000)  // Update the subscriber counter every hour
