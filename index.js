@@ -458,4 +458,4 @@ setInterval(getSubscriberCount, 3_600_000)  // Update the subscriber counter eve
 
 })
 
-process.on("beforeExit", () => {sendError("Shutdown PotatoBot","mhm",0xF5335F)})
+module.exports.client = client
