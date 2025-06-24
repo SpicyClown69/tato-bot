@@ -6,7 +6,7 @@ const bot = require("./index.js")
 
 const {ButtonBuilder, ActionRowBuilder, EmbedBuilder, StringSelectMenuBuilder, REST, Routes, Collection} = require("discord.js")
 const fs = require("node:fs")
-const maintainers = require("F:/maintainers.json")
+const maintainers = require("./maintainers.json")
 
 class potatobot {
 
