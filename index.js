@@ -13,7 +13,7 @@ const token = require("./token.json")
 //Who to send error reports to
 const maintainers = require("./maintainers.json")
 
-const {potatobot} = require("./potatobot"); const pb = new potatobot(token,maintainers,config)
+const {potatobot} = require("./potatobot"); const pb = new potatobot(token,config)
 
 const client = new Client(
     {intents: [

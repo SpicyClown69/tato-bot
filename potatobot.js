@@ -6,13 +6,12 @@ const bot = require("./index.js")
 
 const {ButtonBuilder, ActionRowBuilder, EmbedBuilder, StringSelectMenuBuilder, REST, Routes, Collection} = require("discord.js")
 const fs = require("node:fs")
-// const maintainers = require("F:/maintainers.json")
+const maintainers = require("F:/maintainers.json")
 
 class potatobot {
 
-    constructor (token,maintainers,config) {
+    constructor (token,config) {
         this.token = token
-        this.maintainers = maintainers
         this.config = config
     }
 
