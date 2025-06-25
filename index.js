@@ -83,7 +83,7 @@ client.on("messageCreate", async (msg) => {
 
             blocklist.splice(blocklist.indexOf(msg.author.id),1)
             fs.writeFileSync("./blocklist.json", JSON.stringify(blocklist, null, 4))
-            sendError("User removed from blocklist",msg.author.id,0x0000FF)
+            pb.sendError("User removed from blocklist",msg.author.id,0x0000FF)
             const embed = new EmbedBuilder()
             .setTitle("You have unblocked this bot")
             .setColor(0x00FF00)
