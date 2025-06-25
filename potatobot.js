@@ -169,7 +169,7 @@ class potatobot {
                 }
                 blocklist.push(i.user.id)
                 fs.writeFileSync("./blocklist.json", JSON.stringify(blocklist, null, 4))
-                sendError("user added to blocklist",i.user.id,0x0000FF)
+                pb.sendError("user added to blocklist",i.user.id,0x0000FF)
                 const embed = new EmbedBuilder()
                     .setTitle("Added to block-list")
                     .setColor(0xFF0000)
