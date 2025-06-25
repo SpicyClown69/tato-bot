@@ -276,18 +276,16 @@ class potatobot {
      * Returns SpacePotato's subscriber count and assigns to specified channel
      * @param {string} token 
      */
-    async getSubscriberCount(token) {
+    async getSubscriberCount() {
         const server = await bot.client.guilds.fetch("1251520688569974914");
         const channel = await server.channels.fetch("1382364642499887195");
 
-        const result = await fetch('https://www.googleapis.com/youtube/v3/channels?key='+token[1]+'&part=statistics&forHandle=SpacePotatoee');
+        const result = await fetch('https://www.googleapis.com/youtube/v3/channels?key='+this.token[1]+'&part=statistics&forHandle=SpacePotatoee');
         const text = await result.json();
 
-        // ! TypeError: Cannot read properties of undefined (reading '0')
-        // * Space, you made this so you might have  better understanding on this but are you able to try and fix this, i have no clue
         let subCount = text['items'][0]['statistics']['subscriberCount'];
         let slicedCount = subCount.slice(0, -2);
-        finalCount = slicedCount.slice(0, -1) + '.' + slicedCount.slice(-1) + 'K';
+        let finalCount = slicedCount.slice(0, -1) + '.' + slicedCount.slice(-1) + 'K';
         
         await channel.setName('🎉︱Subscribers: ' + finalCount);
         
@@ -302,8 +300,8 @@ class potatobot {
     }
 
     async sendError(code, error, color) {
-    for(let i = 0; i < maintainers.length; i++){
-        const maintainer = await bot.client.users.fetch(maintainers[i])
+    //for(let i = 0; i < maintainers.length; i++){
+        const maintainer = await bot.client.users.fetch(maintainers[0])
 
         const embed = new EmbedBuilder()
             .setTitle(code)
@@ -312,7 +310,7 @@ class potatobot {
             .setColor(color)
         
         maintainer.send({embeds:[embed]})
-    }
+    //}
 }
 }
 

@@ -17,7 +17,7 @@ const {potatobot} = require("./potatobot"); const pb = new potatobot(token,confi
 
 const client = new Client(
     {intents: [
-        GatewayIntentBits.Guilds, 
+        GatewayIntentBits.Guilds,
         GatewayIntentBits.MessageContent, 
         GatewayIntentBits.GuildMessages, 
         GatewayIntentBits.DirectMessages, 
@@ -107,7 +107,7 @@ client.on("messageCreate", async (msg) => {
     const blocklist = JSON.parse(fs.readFileSync("./blocklist.json")) // just so you dont have to restart the bot every time someone blocks it
     if (blocklist.includes(msg.author.id)) {return}
     const filter = (m) => m.member.id === msg.member.id
-    // ! importing the needed functions through args purely because i dont want to re-import discord.js for "functions.js" and end up with a gigawall of words
+
     pb.backroomsfaq(msg)
 });
 
@@ -130,23 +130,6 @@ process.on("uncaughtException", (e) => {
 })
 //#endregion Error Logging
 
-async function getSubscriberCount() {
-    const server = await client.guilds.fetch("1251520688569974914");
-    const channel = await server.channels.fetch("1382364642499887195");
-
-
-    const result = await fetch('https://www.googleapis.com/youtube/v3/channels?key='+token[1]+'&part=statistics&forHandle=SpacePotatoee');
-    const text = await result.json();
-
-    let subCount = text['items'][0]['statistics']['subscriberCount'];
-    let slicedCount = subCount.slice(0, -2);
-    finalCount = slicedCount.slice(0, -1) + '.' + slicedCount.slice(-1) + 'K';
-    
-    await channel.setName('🎉︱Subscribers: ' + finalCount);
-    
-    console.log("Updated the sub count to " + finalCount);
-}
-
 client.login(token[0])
 client.on("ready", async () => {
     console.log("started");
@@ -155,8 +138,8 @@ client.on("ready", async () => {
     pb.setRandomStatus()
     setInterval(()=>(pb.setRandomStatus()),300_000) // Set a random status every 5 minutes
 
-    getSubscriberCount()
-    setInterval(getSubscriberCount, 3_600_000)  // Update the subscriber counter every hour
+    pb.getSubscriberCount()
+    setInterval(()=>(pb.getSubscriberCount()),3_600_000)  // Update the subscriber counter every hour
 })
 
 module.exports.client = client
