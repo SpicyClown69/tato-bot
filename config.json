@@ -219,16 +219,56 @@
         "some_mod":{
             "fields":[
                 {
-                    "name":"__**THE VOLATILE ADDON FAQ PAGE**__",
-                    "value":"Here are the frequently asked questions about the Volatile Addon for the Found Footage mod, please select an option below\n Go back to the start by clicking \"Back to Home\""
+                    "name":"__**[UPCOMING MOD] FAQ PAGE**__",
+                    "value":"Here are the frequently asked questions about the [UPCOMING MOD], please select an option below\n Go back to the start by clicking \"Back to Home\""
                 }
             ],
             "questions":{
-                "placeholder": {
+                "known_bugs": {
                     "fields": [
                         {
-                            "name": "placeholder name",
-                            "value": "this is to ensure that the update actually WORKS"
+                            "name": "Known Issues",
+                            "value": "Below is a list of known issues with this mod (if youre seeing what looks like placeholder text after the mod releases then raine probably forgot her/their/his job)"
+                        },
+                        {
+                            "name": "- Known Solvable Issues",
+                            "value": ">>> Problem - Solution\nProblem - Solution\nProblem - Solution\nProblem - Solution"
+                        },
+                        {
+                            "name": "- Known Unsolvable Issues",
+                            "value": ">>> Problem\nProblem\nProblem\nProblem"
+                        }
+                    ]
+                },
+                "dependencies": {
+                    "fields": [
+                        {
+                            "name": "Mod Dependencies",
+                            "value": "blablabla fabric if youre seeing this then this needs to be replaced"
+                        }
+                    ]
+                },
+                "how_to_do_this": {
+                    "fields": [
+                        {
+                            "name": "How do I <question>",
+                            "value": "replace this"
+                        }
+                    ]
+                },
+                "how_to_play_multiplayer": {
+                    "fields": [
+                        {
+                            "name": "How do I play with friends?",
+                            "value": "bla bla essentials | list multiplayer stuff"
+                        }
+                    ]
+                },
+                "incompatibilities": {
+                    "fields": [
+                        {
+                            "name": "My game keeps crashing what do I do?",
+                            "value": "list some common mod incompatibilities"
                         }
                     ]
                 }
