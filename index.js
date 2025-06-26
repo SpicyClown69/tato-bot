@@ -71,6 +71,7 @@ client.on("messageCreate", async (message) => {
 })
 
 client.on("messageCreate", async (msg) => {
+    if (msg.author.bot) return
     if ((msg.content.includes("<@1360807782001148134>")||msg.content.toLowerCase().includes("potatobot")) && (msg.content.toLowerCase().includes("sucks")||msg.content.toLowerCase().includes("i hate")||msg.content.toLowerCase().includes("is bad")||msg.content.toLowerCase().includes("is ass")||msg.content.toLowerCase().includes("beat our child")||msg.content.toLowerCase().includes("disown"))) {
         msg.react("😢")
         msg.react("🫃")
@@ -111,6 +112,17 @@ client.on("messageCreate", async (msg) => {
         return
     }
     
+    if (maintainers.includes(msg.author.id) && msg.toLowerCase().includes("send latest commit")) {
+        const last_commit = await pb.getBasicCommitInfo("SpacePotatoee","PotatoBot")
+        pb.sendError(
+            "New Commit",
+            `>>> Commit Author: ${last_commit.author}
+            Commit Date: ${last_commit.date}
+            Commit Message: ${last_commit.message}`,
+            0x023bb5
+        );
+
+    }
 
     const blocklist = JSON.parse(fs.readFileSync("./blocklist.json")) // just so you dont have to restart the bot every time someone blocks it
     if (blocklist.includes(msg.author.id)) {return}
