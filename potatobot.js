@@ -8,13 +8,15 @@ const {ButtonBuilder, ActionRowBuilder, EmbedBuilder, StringSelectMenuBuilder, R
 const fs = require("node:fs")
 const maintainers = require("./maintainers.json")
 
+let active_layer = ""
+
 class potatobot {
 
     constructor (token,config) {
         this.token = token
         this.config = config
     }
-
+    
     get fetchserver() {
         return bot.client.guilds.fetch("1251520688569974914")
     }
@@ -32,15 +34,31 @@ class potatobot {
      * Returns an object to create the select options
      * @returns object
      */
-    createSelectOptions() {// TODO: Make this not hardcoded to allow for selecting which FAQ the user would like to read
+    createSelectOptions(layer) {// TODO: Make this not hardcoded to allow for selecting which FAQ the user would like to read
+        console.log(Object.getPrototypeOf(this.getFaqLayer(layer)))
         let buffer = []
-        for (var i = 0; i < Object.keys(this.config.faq).length; i++) { // 4:20GMT istfg if i have to do the most jank ass solution to get this to work
+        const faq_layer = this.getFaqLayer(layer)
+        for (var i = 0; i < Object.keys(faq_layer).length; i++) { // 4:20GMT istfg if i have to do the most jank ass solution to get this to work
             buffer.push({
-                label:(this.config.faq[ Object.keys(this.config.faq) [i] ].fields[0].name),
-                value:(Object.keys(this.config.faq)[i].toString()) 
+                label:(faq_layer[ Object.keys(faq_layer) [i] ].fields[0].name),
+                value:(Object.keys(faq_layer)[i].toString()) 
             })
         }
+
         return buffer
+    }
+    
+    getFaqLayer(layer) {
+        if (Object.keys(this.config.faq).includes(layer)) {
+            active_layer = layer
+        }
+
+        if (layer === undefined) {
+            active_layer = ""
+            return this.config.faq
+        } else {
+            return eval("this.config.faq."+active_layer+".questions")
+        }
     }
 
     /**
@@ -86,6 +104,72 @@ class potatobot {
         });
     }
 
+    createSelectMenu(layer) {
+        return (new StringSelectMenuBuilder()
+            .setCustomId('faq')
+            .setPlaceholder('Select a Question')
+            .setOptions(this.createSelectOptions(layer)))
+    }
+    
+    /**
+     * Creates a button with the selected parameters. When creating a link button pass "customId" as null and when not then ignore the url arg
+     * @param {string} label 
+     * @param {string} style 
+     * @param {string} customId 
+     * @param {string} URL 
+     * @returns Button
+     */
+    createButton(label, style, customId, URL) {
+        if (style === "Link") {
+            return (
+                new ButtonBuilder()
+                    .setLabel(label)
+                    .setURL(URL)
+                    .setStyle(style)
+            )
+        }
+        return (
+            new ButtonBuilder()
+                .setLabel(label)
+                .setCustomId(customId)
+                .setStyle(style)
+        )
+    }
+
+    createActionRow(layer) {
+        const another_row = new ActionRowBuilder()
+            .addComponents(this.createButton("Back to Home", "Secondary", "home"))
+        const selector_last_element = new ActionRowBuilder()
+            .addComponents(this.createSelectMenu(layer))
+        const block = new ButtonBuilder()
+            .setLabel("Block")
+            .setCustomId("block")
+            .setStyle("Danger")
+        switch (layer) {
+            default:
+                return [another_row, selector_last_element]
+            case "found_footage":
+                const row = new ActionRowBuilder()
+                    .addComponents(
+                        this.createButton("KNOWN ISSUES", "Primary", "issues"), 
+                        this.createButton("Backrooms Wiki", "Link", null, this.config.links.wiki),
+                        this.createButton("Use Mac?", "Link", null, this.config.links.wiki_mac),
+                        this.createButton("Video Tutorial", "Link", null, this.config.links.wiki_install),
+                        block
+                    )
+                return [row, another_row, selector_last_element]
+
+            case "some_mod":
+                return [another_row, selector_last_element]
+        }
+
+        // const row = new ActionRowBuilder()
+        //     .addComponents(issues, wiki, mac_not_working, tutorial, block)
+
+        // const row2 = new ActionRowBuilder()
+        //     .addComponents(this.createSelectMenu(layer))
+        
+    }
 
     // i know its just moving this to a function
     // but baby-steps. Im eventually going to have to figure out a more cusomisable way
@@ -98,55 +182,18 @@ class potatobot {
      */
     async backroomsfaq(msg) {
         const live_config = JSON.parse(fs.readFileSync("./config.json"))
-        const select = new StringSelectMenuBuilder()
-            .setCustomId('faq')
-            .setPlaceholder('Select a Question')
-            //.setOptions(selectOptions.map(question => { return { label:question.label.toString(), value:question.value.toString()}}))
-            .setOptions(this.createSelectOptions())
+        let current_layer
         
-        const wiki = new ButtonBuilder()
-            .setLabel("Backrooms Wiki")
-            .setURL(this.config.links.wiki)
-            .setStyle("Link")
-
-        const mac_not_working = new ButtonBuilder()
-            .setLabel("Use Mac?")
-            .setURL(this.config.links.wiki_mac)
-            .setStyle("Link")
-
-        const tutorial = new ButtonBuilder()
-            .setLabel("Video Tutorial")
-            .setURL(this.config.links.wiki_install)
-            .setStyle("Link")
-
-        const block = new ButtonBuilder()
-            .setLabel("Block")
-            .setCustomId("block")
-            .setStyle("Danger")
-            
-
-        const issues = new ButtonBuilder()
-            .setLabel("READ | KNOWN ISSUES")
-            .setCustomId("issues")
-            .setStyle("Primary")
-
-        const row = new ActionRowBuilder()
-            .addComponents(issues, wiki, mac_not_working, tutorial, block)
-
-        const row2 = new ActionRowBuilder()
-            .addComponents(select)
-
         const embed = new EmbedBuilder()
             .setColor(0xFFCC00)
             .setThumbnail(live_config.links.embed_image)
             .setTitle("Frequently Asked Questions")
             .addFields(
-                { name:"What can I find here?", value:"You can find links to very important info below at all times.\nSelect your question below"}
+                { name:"What can I find here?", value:"You can find links to very important info below at all times.\nPlease select the desired mod below. Go back to this page by clicking \"Back to Home\""}
             )
-            .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
         const response = await msg.reply({
             embeds: [embed] ,
-            components: [row,row2],
+            components: this.createActionRow(),
             withResponse: true,
             ephemeral: true
         });
@@ -192,19 +239,42 @@ class potatobot {
                 return
             }
 
+            if (i.customId === "home") {
+                i.update({
+                    embeds: [embed] ,
+                    components: this.createActionRow(),
+                    withResponse: true,
+                    ephemeral: true
+                })
+            }
 
-            const selection = i.values[0];
-            try {
-                const embed = new EmbedBuilder()
-                    .setTitle("Frequently Asked Questions")
-                    .setColor(0xFFCC00)
-                    .setThumbnail(live_config.links.embed_image)
-                    .addFields(live_config.faq[selection].fields)
-                    .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
-                    .setImage(live_config.faq[selection].image ?? null)
-                i.update({embeds:[embed], components:[row,row2], ephemeral: true})
-            } catch (e) {
-                console.log(e)
+            if (i.customId === "faq") {
+                const selection = i.values[0];
+                console.log(selection)
+                try {
+
+                    const row = this.createActionRow(selection)
+                    console.log(active_layer)
+                    console.log(selection)
+                    let field_path = ".fields"
+                    let image_path = ".image"
+                    if ((active_layer !== "") && selection !== active_layer) {
+                        field_path = ".questions."+selection+".fields"
+                        image_path = ".questions."+selection+".image"
+                    }
+                    console.log([field_path, image_path])
+                    //console.log(Object.keys(eval("live_config.faq."+selection+".questions.fields")))
+                    const embed = new EmbedBuilder()
+                        .setTitle("Frequently Asked Questions")
+                        .setColor(0xFFCC00)
+                        .setThumbnail(live_config.links.embed_image)
+                        .addFields(eval("live_config.faq."+active_layer+field_path))
+                        .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
+                        .setImage(eval("live_config.faq."+active_layer+image_path) ?? null)
+                    i.update({embeds:[embed], components:row, ephemeral: true})
+                } catch (e) {
+                    console.log(e)
+                }
             }
         })
     }
@@ -300,8 +370,8 @@ class potatobot {
     }
 
     async sendError(code, error, color) {
-    //for(let i = 0; i < maintainers.length; i++){
-        const maintainer = await bot.client.users.fetch(maintainers[0])
+    for(let i = 0; i < maintainers.length; i++){
+        const maintainer = await bot.client.users.fetch(maintainers[i])
 
         const embed = new EmbedBuilder()
             .setTitle(code)
@@ -310,8 +380,44 @@ class potatobot {
             .setColor(color)
         
         maintainer.send({embeds:[embed]})
-    //}
+    }
+    }
+
+    /**
+     * Makes an API Request to github to pull commit info and returns the latest info
+     * @param {String} RepoName Needs repository name in form of string
+     * @param {String} RepoOwner Needs repository owner in form of string
+     * 
+     * @returns JSON as PROMISE
+     */
+    async githubApiReqCommit(RepoOwner, RepoName) {
+        const temp = await fetch(`https://api.github.com/repos/${RepoOwner}/${RepoName}/commits?per_page=1`)
+
+        return temp.json()
+        
+    }
+    
+    /**
+     * Returns basic info from the APIReq function
+     * @param {String} RepoName Needs repository name in form of string
+     * @param {String} RepoOwner Needs repository owner in form of string
+     * 
+     * @returns JSON
+     */
+    async getBasicCommitInfo(RepoOwner, RepoName) {
+        const commit_temp = await this.githubApiReqCommit(RepoOwner, RepoName) // idk what to call it but its the parents info, gets the repo commit data and caches it
+        
+        let latest_commit = {
+            "author":commit_temp[0].commit.author.name,
+            "date":new Date(commit_temp[0].commit.author.date).toUTCString(),
+            "message":commit_temp[0].commit.message,
+        }
+        return latest_commit
+    }
+
 }
-}
+
+//
+
 
 module.exports.potatobot = potatobot

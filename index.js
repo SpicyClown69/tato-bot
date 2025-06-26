@@ -133,7 +133,15 @@ process.on("uncaughtException", (e) => {
 client.login(token[0])
 client.on("ready", async () => {
     console.log("started");
-    pb.sendError("Started PotatoBot","mhm",0x00FF00);
+    const last_commit = await pb.getBasicCommitInfo("SpacePotatoee","PotatoBot")
+    pb.sendError(
+        "Started PotatoBot",
+        `__**Latest Commit**__
+        >>> Commit Author: ${last_commit.author}
+        Commit Date: ${last_commit.date}
+        Commit Message: ${last_commit.message}`,
+        0x00FF00
+    );
 
     pb.setRandomStatus()
     setInterval(()=>(pb.setRandomStatus()),300_000) // Set a random status every 5 minutes
