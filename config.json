@@ -219,8 +219,8 @@
         "some_mod":{
             "fields":[
                 {
-                    "name":"__**[PLACEHOLDER] MOD FAQ PAGE**__",
-                    "value":"Here are the frequently asked questions about the [PLACEHOLDER] mod, please select an option below\n Go back to the start by clicking \"Back to Home\""
+                    "name":"__**THE VOLATILE ADDON FAQ PAGE**__",
+                    "value":"Here are the frequently asked questions about the Volatile Addon for the Found Footage mod, please select an option below\n Go back to the start by clicking \"Back to Home\""
                 }
             ],
             "questions":{

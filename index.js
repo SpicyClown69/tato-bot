@@ -100,15 +100,23 @@ client.on("messageCreate", async (msg) => {
             msg.reply({embeds:[embed], ephemeral: true})
     }
 
-
-
     if (pb.filterCheck(msg) === false) {return}
+
+    if ((pb.checkMaintenanceStatus === true) && !maintainers.includes(msg.author.id)) {
+        const embed = new EmbedBuilder()
+            .setTitle("PotatoBot is currently under maintenance.")
+            .setDescription("PotatoBot is either undergoing development or being patched, please try again later")
+            .setColor(0xFF1111)
+        msg.reply({embeds:[embed]})
+        return
+    }
+    
 
     const blocklist = JSON.parse(fs.readFileSync("./blocklist.json")) // just so you dont have to restart the bot every time someone blocks it
     if (blocklist.includes(msg.author.id)) {return}
     const filter = (m) => m.member.id === msg.member.id
 
-    pb.backroomsfaq(msg)
+    pb.faq(msg)
 });
 
 

@@ -34,7 +34,7 @@ class potatobot {
      * Returns an object to create the select options
      * @returns object
      */
-    createSelectOptions(layer) {// TODO: Make this not hardcoded to allow for selecting which FAQ the user would like to read
+    createSelectOptions(layer) {
         console.log(Object.getPrototypeOf(this.getFaqLayer(layer)))
         let buffer = []
         const faq_layer = this.getFaqLayer(layer)
@@ -48,14 +48,20 @@ class potatobot {
         return buffer
     }
     
+
+    /**
+     * Pass the name of the mod that is in the FAQ and then return its path
+     * @param {string} layer 
+     * @returns string - JSON PATH
+     */
     getFaqLayer(layer) {
-        if (Object.keys(this.config.faq).includes(layer)) {
+        if (Object.keys((this.liveConfig()).faq).includes(layer)) {
             active_layer = layer
         }
 
         if (layer === undefined) {
             active_layer = ""
-            return this.config.faq
+            return (this.liveConfig()).faq
         } else {
             return eval("this.config.faq."+active_layer+".questions")
         }
@@ -136,6 +142,19 @@ class potatobot {
         )
     }
 
+
+    /**
+     * Use this to create a hotloading config instance
+     * @returns JSON - Live Updating Config File
+     */
+    liveConfig() {
+        return JSON.parse(fs.readFileSync("./config.json"))
+    }
+
+    /**
+    * Creates the buttons for the corresponding mod FAQ
+    * @param {string} layer 
+    */
     createActionRow(layer) {
         const another_row = new ActionRowBuilder()
             .addComponents(this.createButton("Back to Home", "Secondary", "home"))
@@ -145,7 +164,7 @@ class potatobot {
             .setLabel("Block")
             .setCustomId("block")
             .setStyle("Danger")
-        switch (layer) {
+        switch (active_layer) {
             default:
                 return [another_row, selector_last_element]
             case "found_footage":
@@ -171,18 +190,12 @@ class potatobot {
         
     }
 
-    // i know its just moving this to a function
-    // but baby-steps. Im eventually going to have to figure out a more cusomisable way
-    // * Basically my idea is to create a class for this, and what happens is that the embed gets made in the "main" function
-    // * and you can modify the data of that function using other ones, like appending buttons or info
-    // * i guess an easy way is to think of it like a conveyor belt or production line. The robots (functions) assemble the product (embed) and then you call a function to actually send the completed data
-    // * probably a pretty stupid way to do it but if it works then it works
     /**
      * Sends the FAQ to the Found Footage mod
+     * @param {Message} Input the message class
      */
-    async backroomsfaq(msg) {
+    async faq(msg) {
         const live_config = JSON.parse(fs.readFileSync("./config.json"))
-        let current_layer
         
         const embed = new EmbedBuilder()
             .setColor(0xFFCC00)
@@ -285,7 +298,8 @@ class potatobot {
     welcomer() {
         bot.client.on('guildMemberAdd', async (member) => {
             if(member.bot) return;
-        
+            if(this.checkMaintenanceStatus === true) return;
+
             console.log(member.displayName + " joined the server!");
             const server = member.guild;
             const welcomeChannel = server.systemChannel;
@@ -413,6 +427,31 @@ class potatobot {
             "message":commit_temp[0].commit.message,
         }
         return latest_commit
+    }
+
+    maintenanceMode(msg) {
+
+        if (!maintainers.includes(msg.author.id)) {return}
+
+        let upd_config = JSON.parse(fs.readFileSync("./maintenancetoggle.json"))
+        
+        if (msg.content.toLowerCase().includes("on")) {
+            upd_config.maintenance = true
+            this.setName("FAQ | PotatoBot | Dev")
+            fs.writeFileSync("./maintenancetoggle.json",JSON.stringify(upd_config,null,4))
+            return
+        }
+
+        if (msg.content.toLowerCase().includes("off")) {
+            upd_config.maintenance = false
+            this.setName("FAQ | PotatoBot")
+            fs.writeFileSync("./maintenancetoggle.json",JSON.stringify(upd_config,null,4))
+            return
+        }
+    }
+
+    get checkMaintenanceStatus() {
+        return JSON.parse(fs.readFileSync("./maintenancetoggle.json")).maintenance
     }
 
 }
