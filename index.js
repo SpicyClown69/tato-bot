@@ -111,8 +111,10 @@ client.on("messageCreate", async (msg) => {
         msg.reply({embeds:[embed]})
         return
     }
+    if (msg.content.includes(" ")) {pb.maintenanceMode(msg); return}
     
-    if (maintainers.includes(msg.author.id) && msg.toLowerCase().includes("send latest commit")) {
+    
+    if (maintainers.includes(msg.author.id) && msg.content.toLowerCase().includes("send latest commit")) {
         const last_commit = await pb.getBasicCommitInfo("SpacePotatoee","PotatoBot")
         pb.sendError(
             "New Commit",

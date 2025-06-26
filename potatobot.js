@@ -448,6 +448,7 @@ class potatobot {
             fs.writeFileSync("./maintenancetoggle.json",JSON.stringify(upd_config,null,4))
             return
         }
+        return
     }
 
     get checkMaintenanceStatus() {
