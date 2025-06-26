@@ -13,6 +13,7 @@ lerna-debug.log*
 # bot stuff
 token.json
 maintainers.json
+maintenancetoggle.json
 
 # Environment variables
 .env
