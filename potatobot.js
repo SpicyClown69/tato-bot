@@ -151,11 +151,11 @@ class potatobot {
             case "found_footage":
                 const row = new ActionRowBuilder()
                     .addComponents(
-                        this.createButton("KNOWN ISSUES", "Primary", "issues"), 
+                        //this.createButton("KNOWN ISSUES", "Primary", "issues"), 
                         this.createButton("Backrooms Wiki", "Link", null, this.config.links.wiki),
                         this.createButton("Use Mac?", "Link", null, this.config.links.wiki_mac),
                         this.createButton("Video Tutorial", "Link", null, this.config.links.wiki_install),
-                        block
+                        //block
                     )
                 return [row, another_row, selector_last_element]
 
