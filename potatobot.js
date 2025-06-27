@@ -280,7 +280,7 @@ class potatobot {
                     const embed = new EmbedBuilder()
                         .setTitle("Frequently Asked Questions")
                         .setColor(0xFFCC00)
-                        .setThumbnail(live_config.links.embed_image)
+                        // .setThumbnail(live_config.links.embed_image)
                         .addFields(eval("live_config.faq."+active_layer+field_path))
                         .setFooter({text:"Click \"block\" if you dont want to see this anymore"})
                         .setImage(eval("live_config.faq."+active_layer+image_path) ?? null)
