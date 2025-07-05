@@ -1,3 +1,9 @@
+# stuff stolen from raine :3
+old/
+
+# bot specific stuff i'm not including for now
+logging.json
+
 # Dependency directories
 node_modules/
 jspm_packages/

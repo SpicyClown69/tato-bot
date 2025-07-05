@@ -10,6 +10,7 @@
   "description": "",
   "dependencies": {
     "discord.js": "^14.18.0",
+    "dotenv": "^17.0.1",
     "ollama": "^0.5.15",
     "ollamajs": "^0.5.0"
   }
