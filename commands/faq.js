@@ -43,7 +43,9 @@ module.exports = {
                 embeds: [new EmbedBuilder()
                     .setTitle("Frequently Asked Questions")
                     .setDescription("\n__**"+currentLevel.title+"**__\n" + currentLevel.description)
-                    .setImage(currentLevel.image)],
+                    .setImage(currentLevel.image)
+                    .setColor(0xffcc00)
+                    .setThumbnail(config.links.embed_image)],
                 components: components
             };
         };

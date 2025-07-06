@@ -1,4 +1,14 @@
 {
+    "links": {
+        "embed_image": "https://cdn.discordapp.com/attachments/1361390588523712512/1367576285789814864/831ad01659612e42dc2adfe6bcf00b3a4a5515f4_96.png?ex=6815162a&is=6813c4aa&hm=033e5957be17f3f9c777d5b8523a7d4b4e66233115937e755ea8ffe2ad00c3b2&",
+        "wiki":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki",
+        "wiki_enter_backrooms":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#entering-the-backrooms",
+        "wiki_dependencies":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info",
+        "wiki_multiplayer":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki#multiplayer",
+        "wiki_mac":"https://github.com/SpacePotatoee/MinecraftFoundFootage/wiki/Mod-Info#incompatibilities",
+        "wiki_install":"https://youtu.be/89AWIz0RtFw",
+        "modrinth": "https://modrinth.com/mod/backrooms"
+    },
     "enableCommands":true,
     "enableAutoreact":true,
     "faq": {
